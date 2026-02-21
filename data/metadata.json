@@ -27,5 +27,14 @@
     "2026-02": 4,
     "2026-01": 8
   },
+  "by_direction": {
+    "pro": 12,
+    "critical": 0,
+    "neutral": 0
+  },
+  "by_direction_by_month": {
+    "2026-02": { "pro": 4, "critical": 0, "neutral": 0 },
+    "2026-01": { "pro": 8, "critical": 0, "neutral": 0 }
+  },
   "detected_bursts": []
 }

@@ -35,6 +35,7 @@ ARCHIVE_DIR.mkdir(exist_ok=True)
 
 # ─── Reddit search config ─────────────────────────────────────────────────────
 REDDIT_QUERIES = [
+    # Pro-Qobuz / switch recommendation
     "switch to Qobuz",
     "switched to Qobuz",
     "switching to Qobuz",
@@ -48,12 +49,32 @@ REDDIT_QUERIES = [
     "leave Spotify Qobuz",
     "Qobuz better than Spotify",
     "Qobuz over Spotify",
+    # Criticism / issues
+    "Qobuz app not working",
+    "Qobuz broken",
+    "Qobuz bug",
+    "Qobuz crash",
+    "Qobuz missing album",
+    "Qobuz catalog",
+    "Qobuz customer service",
+    "Qobuz refund",
+    "Qobuz cancel subscription",
+    "Qobuz price",
+    "Qobuz problem",
+    "Qobuz issue",
+    "Qobuz complaint",
+    "Qobuz vs Tidal",
+    "Qobuz vs Apple Music",
+    "leaving Qobuz",
+    "switched from Qobuz",
+    "cancel Qobuz",
 ]
 
 REDDIT_SUBREDDITS = [
     "Music", "audiophile", "hifi", "BoycottIsrael", "degoogle",
     "TIdaL", "fantanoforever", "audiofiliabrasil", "spotify",
     "headphones", "vinyl", "letstalkmusic", "indieheads",
+    "qobuz",  # official Qobuz community — prime source for complaints
 ]
 
 # ─── News search config ───────────────────────────────────────────────────────
@@ -63,6 +84,9 @@ NEWS_QUERIES = [
     "Qobuz streaming review",
     "Qobuz pays artists",
     "switch music streaming Qobuz",
+    "Qobuz app problems",
+    "Qobuz criticism",
+    "Qobuz complaints users",
 ]
 
 # Direct RSS feeds from music industry trades — no API key needed
@@ -72,6 +96,41 @@ DIRECT_RSS_FEEDS = [
     ("The Ear", "https://the-ear.net/feed/"),
     ("Hifi News", "https://www.hifinews.com/feed"),
 ]
+
+# ─── Direction detection ──────────────────────────────────────────────────────
+
+CRITICISM_KEYWORDS = [
+    "not working", "broken", "bug", "crash", "issue", "problem",
+    "complaint", "cancel", "refund", "leaving qobuz", "switched from qobuz",
+    "worse than", "qobuz sucks", "disappointed", "poor customer",
+    "missing album", "missing artist", "catalog gap", "no support",
+    "customer service", "billing", "overpriced", "price hike",
+    "too expensive", "app is bad", "app is terrible", "qobuz lacks",
+]
+
+PRO_KEYWORDS = [
+    "switch to qobuz", "switched to qobuz", "switching to qobuz",
+    "recommend qobuz", "qobuz is better", "moved to qobuz",
+    "love qobuz", "qobuz over", "best streaming", "from spotify to qobuz",
+]
+
+
+def detect_direction(text: str, narratives: list[str]) -> str:
+    """
+    Classify whether a post is pro-Qobuz, critical of Qobuz, or neutral.
+    Returns 'pro', 'critical', or 'neutral'.
+    """
+    if not text:
+        return "neutral"
+    lower = text.lower()
+    is_critical = any(kw in lower for kw in CRITICISM_KEYWORDS)
+    is_pro = any(kw in lower for kw in PRO_KEYWORDS) or "switch-recommendation" in narratives
+    if is_critical and not is_pro:
+        return "critical"
+    if is_pro:
+        return "pro"
+    return "neutral"
+
 
 # ─── Utility ──────────────────────────────────────────────────────────────────
 
@@ -213,12 +272,14 @@ def collect_reddit(existing_ids: set) -> list[dict]:
             age_days = None
             karma = None
 
+        narratives = tag_narratives(full_text)
         post = {
             "id": pid,
             "source": "reddit",
             "type": "post",
             "platform_from": detect_platform_from(full_text),
-            "narratives": tag_narratives(full_text),
+            "narratives": narratives,
+            "direction": detect_direction(full_text, narratives),
             "url": f"https://reddit.com{sub.permalink}",
             "title": sub.title[:300],
             "text": sub.selftext[:600] if sub.selftext else "",
@@ -273,12 +334,14 @@ def collect_reddit(existing_ids: set) -> list[dict]:
         except Exception:
             parent_url = f"https://reddit.com/r/{subreddit_name}"
 
+        comment_narratives = tag_narratives(body)
         post = {
             "id": pid,
             "source": "reddit",
             "type": "comment",
             "platform_from": detect_platform_from(body),
-            "narratives": tag_narratives(body),
+            "narratives": comment_narratives,
+            "direction": detect_direction(body, comment_narratives),
             "url": parent_url + f"/_/{comment.id}",
             "title": body[:120] + ("…" if len(body) > 120 else ""),
             "text": body[:600],
@@ -392,12 +455,14 @@ def collect_news(existing_ids: set) -> list[dict]:
             except Exception:
                 date_iso = now
 
+            news_narratives = tag_narratives(full_text)
             post = {
                 "id": pid,
                 "source": "news",
                 "type": "article",
                 "platform_from": detect_platform_from(full_text),
-                "narratives": tag_narratives(full_text),
+                "narratives": news_narratives,
+                "direction": detect_direction(full_text, news_narratives),
                 "url": link,
                 "title": title[:300],
                 "text": description[:600],
@@ -445,12 +510,14 @@ def collect_news(existing_ids: set) -> list[dict]:
                 date_iso = dt.isoformat()
             except Exception:
                 date_iso = now
+            rss_narratives = tag_narratives(full_text)
             post = {
                 "id": pid,
                 "source": "news",
                 "type": "article",
                 "platform_from": detect_platform_from(full_text),
-                "narratives": tag_narratives(full_text),
+                "narratives": rss_narratives,
+                "direction": detect_direction(full_text, rss_narratives),
                 "url": link,
                 "title": title[:300],
                 "text": description[:600],
@@ -525,12 +592,14 @@ def collect_twitter(existing_ids: set) -> list[dict]:
                     author_name = "unknown"
                     age_days = None
 
+                tweet_narratives = tag_narratives(text)
                 post = {
                     "id": pid,
                     "source": "twitter",
                     "type": "tweet",
                     "platform_from": detect_platform_from(text),
-                    "narratives": tag_narratives(text),
+                    "narratives": tweet_narratives,
+                    "direction": detect_direction(text, tweet_narratives),
                     "url": f"https://x.com/{author_name}/status/{tweet.id}",
                     "title": text[:120] + ("…" if len(text) > 120 else ""),
                     "text": text[:600],
@@ -642,6 +711,8 @@ def build_metadata(all_posts: list[dict]) -> dict:
     by_narrative: dict[str, int] = {}
     by_platform: dict[str, int] = {}
     by_month: dict[str, int] = {}
+    by_direction: dict[str, int] = {"pro": 0, "critical": 0, "neutral": 0}
+    by_direction_by_month: dict[str, dict[str, int]] = {}
 
     week_ago = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
     posts_this_week = 0
@@ -664,6 +735,14 @@ def build_metadata(all_posts: list[dict]) -> dict:
         if date_str and date_str >= week_ago:
             posts_this_week += 1
 
+        direction = p.get("direction", "neutral")
+        by_direction[direction] = by_direction.get(direction, 0) + 1
+        if date_str:
+            month = date_str[:7]
+            if month not in by_direction_by_month:
+                by_direction_by_month[month] = {"pro": 0, "critical": 0, "neutral": 0}
+            by_direction_by_month[month][direction] = by_direction_by_month[month].get(direction, 0) + 1
+
     high_bot = [p for p in all_posts if p.get("bot_score", 0) >= 0.6]
 
     return {
@@ -675,6 +754,8 @@ def build_metadata(all_posts: list[dict]) -> dict:
         "by_narrative": dict(sorted(by_narrative.items(), key=lambda x: -x[1])),
         "by_platform_from": by_platform,
         "by_month": dict(sorted(by_month.items(), reverse=True)),
+        "by_direction": by_direction,
+        "by_direction_by_month": dict(sorted(by_direction_by_month.items(), reverse=True)),
         "detected_bursts": [],  # populated by detect_campaign_bursts()
     }
 

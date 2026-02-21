@@ -58,6 +58,33 @@ NARRATIVE_RULES = {
         "apple music to qobuz", "youtube to qobuz", "tidal to qobuz",
         "from spotify", "spotify alternative", "alternative to spotify"
     ],
+
+    # ── Criticism / issue narratives ──────────────────────────────────────────
+    "app-issues": [
+        "app crash", "app broken", "not working", "crashes", "freezes",
+        "bug", "glitch", "error", "won't load", "login issue", "buffering",
+        "won't play", "skipping", "desktop app", "mobile app", "app keeps",
+        "app is terrible", "app sucks", "app is bad", "app is broken",
+        "playback issue", "playback problem", "download issue",
+    ],
+    "catalog-gaps": [
+        "missing album", "missing artist", "not on qobuz", "limited catalog",
+        "can't find", "not available", "missing from", "no qobuz version",
+        "doesn't have", "wish they had", "catalog is limited", "smaller catalog",
+        "not in qobuz", "qobuz doesn't have", "qobuz lacks",
+    ],
+    "service-issues": [
+        "customer service", "support ticket", "no response", "billing issue",
+        "charged twice", "refund", "cancel subscription", "subscription issue",
+        "poor support", "terrible service", "no help", "unresponsive",
+        "overcharged", "double charge", "account issue", "can't cancel",
+    ],
+    "pricing-complaints": [
+        "too expensive", "price hike", "raised the price", "not worth",
+        "overpriced", "cheaper elsewhere", "better value elsewhere",
+        "tidal is cheaper", "apple music cheaper", "costs too much",
+        "price increase", "more expensive than", "subscription cost",
+    ],
 }
 
 # Which platform they're switching FROM

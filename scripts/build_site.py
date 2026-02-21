@@ -32,8 +32,8 @@ def get_archive_months() -> list[str]:
         if len(f.stem) == 7 and f.stem[4] == '-':
             months.append(f.stem)
     months.sort(reverse=True)
-    # Limit to 12 most recent
-    return months[:12]
+    # Limit to 6 most recent
+    return months[:6]
 
 
 def main():

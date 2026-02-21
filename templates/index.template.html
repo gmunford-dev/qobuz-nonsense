@@ -593,6 +593,73 @@
     white-space: nowrap;
   }
   .csv-export-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Direction accent on cards ── */
+  .post-card.direction-critical { border-left: 3px solid #ffaa44; }
+  .post-card.direction-pro { border-left: 3px solid rgba(194,255,160,0.35); }
+
+  /* Criticism narrative dot/pill colors */
+  .dot-app-issues { background: #ff9966; }
+  .dot-catalog-gaps { background: #ffcc44; }
+  .dot-service-issues { background: #ff8844; }
+  .dot-pricing-complaints { background: #ffa033; }
+  .pill-app-issues { background: rgba(255,153,102,0.15); color: #ff9966; }
+  .pill-catalog-gaps { background: rgba(255,204,68,0.15); color: #ffcc44; }
+  .pill-service-issues { background: rgba(255,136,68,0.15); color: #ff8844; }
+  .pill-pricing-complaints { background: rgba(255,160,51,0.15); color: #ffa033; }
+
+  /* ── Top posts panel ── */
+  .top-posts-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+  }
+  .top-posts-card h2 {
+    font-size: 13px; font-weight: 600; color: var(--text2);
+    margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .top-post-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .top-post-item:last-child { border-bottom: none; }
+  .top-post-rank { font-size: 20px; font-weight: 800; color: var(--muted); width: 24px; flex-shrink: 0; line-height: 1.2; }
+  .top-post-body { flex: 1; min-width: 0; }
+  .top-post-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 4px; }
+  .top-post-title a { color: inherit; text-decoration: none; }
+  .top-post-title a:hover { color: var(--accent); }
+  .top-post-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* ── Two-column layout ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* ── Subreddit breakdown ── */
+  .subreddit-table-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+  }
+  .subreddit-table-card h2 {
+    font-size: 13px; font-weight: 600; color: var(--text2);
+    margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .subreddit-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px;
+  }
+  .subreddit-row:last-child { border-bottom: none; }
+  .subreddit-name { color: var(--accent2); }
+  .subreddit-bar-wrap { flex: 1; height: 4px; background: var(--border); border-radius: 2px; margin: 0 10px; }
+  .subreddit-bar { height: 4px; background: var(--accent); border-radius: 2px; }
+  .subreddit-count { font-weight: 600; color: var(--text); }
+
+  /* ── Velocity badge ── */
+  .velocity-badge { font-size: 11px; font-weight: 600; padding: 1px 5px; border-radius: 4px; margin-left: 4px; }
+  .velocity-up { background: rgba(94,255,168,0.15); color: var(--ok); }
+  .velocity-down { background: rgba(255,94,94,0.15); color: var(--danger); }
+  .velocity-flat { background: rgba(107,107,136,0.15); color: var(--muted); }
 </style>
 </head>
 <body>
@@ -616,12 +683,17 @@
     <div class="stat-divider"></div>
     <div class="stat">
       <div class="stat-value" id="stat-week">—</div>
-      <div class="stat-label">This Week</div>
+      <div class="stat-label">This Week <span id="stat-velocity"></span></div>
     </div>
     <div class="stat-divider"></div>
     <div class="stat">
       <div class="stat-value" id="stat-bot" style="color: var(--danger)">—</div>
       <div class="stat-label">High Bot Suspicion</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-value" id="stat-critical" style="color: #ffaa44">—</div>
+      <div class="stat-label">Critical Posts</div>
     </div>
     <div class="stat-divider"></div>
     <div class="stat">
@@ -667,6 +739,37 @@
           <span class="chip-dot dot-twitter"></span>
           X / Twitter
           <span class="chip-count" id="count-source-twitter">0</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Direction filter -->
+    <div class="filter-section">
+      <h3>Direction</h3>
+      <div class="filter-group" id="filter-direction">
+        <label class="filter-chip active" data-filter="direction" data-value="all">
+          <input type="checkbox" checked>
+          <span class="chip-dot" style="background: var(--muted)"></span>
+          All
+          <span class="chip-count" id="count-direction-all">—</span>
+        </label>
+        <label class="filter-chip" data-filter="direction" data-value="pro">
+          <input type="checkbox">
+          <span class="chip-dot" style="background: #c2ffa0"></span>
+          Pro-Qobuz
+          <span class="chip-count" id="count-direction-pro">0</span>
+        </label>
+        <label class="filter-chip" data-filter="direction" data-value="critical">
+          <input type="checkbox">
+          <span class="chip-dot" style="background: #ffaa44"></span>
+          Critical
+          <span class="chip-count" id="count-direction-critical">0</span>
+        </label>
+        <label class="filter-chip" data-filter="direction" data-value="neutral">
+          <input type="checkbox">
+          <span class="chip-dot" style="background: var(--muted)"></span>
+          Neutral
+          <span class="chip-count" id="count-direction-neutral">0</span>
         </label>
       </div>
     </div>
@@ -764,6 +867,26 @@
           Pro-Indie
           <span class="chip-count" id="count-n-pro-indie">0</span>
         </label>
+        <label class="filter-chip" data-filter="narrative" data-value="app-issues">
+          <span class="chip-dot dot-app-issues"></span>
+          App Issues
+          <span class="chip-count" id="count-n-app-issues">0</span>
+        </label>
+        <label class="filter-chip" data-filter="narrative" data-value="catalog-gaps">
+          <span class="chip-dot dot-catalog-gaps"></span>
+          Catalog Gaps
+          <span class="chip-count" id="count-n-catalog-gaps">0</span>
+        </label>
+        <label class="filter-chip" data-filter="narrative" data-value="service-issues">
+          <span class="chip-dot dot-service-issues"></span>
+          Service Issues
+          <span class="chip-count" id="count-n-service-issues">0</span>
+        </label>
+        <label class="filter-chip" data-filter="narrative" data-value="pricing-complaints">
+          <span class="chip-dot dot-pricing-complaints"></span>
+          Pricing
+          <span class="chip-count" id="count-n-pricing-complaints">0</span>
+        </label>
       </div>
     </div>
 
@@ -797,9 +920,29 @@
 
     <!-- Trends chart -->
     <div class="chart-card">
-      <h2>Narrative Trends — Posts per Month</h2>
+      <h2>Narrative Trends — Posts per Month (Last 6 Months)</h2>
       <div class="chart-container">
         <canvas id="trends-chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Sentiment balance chart -->
+    <div class="chart-card">
+      <h2>Pro vs. Critical — Sentiment Balance (Last 6 Months)</h2>
+      <div class="chart-container">
+        <canvas id="sentiment-chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Top posts this week + Subreddit breakdown -->
+    <div class="two-col">
+      <div class="top-posts-card">
+        <h2>🔥 Top Posts This Week</h2>
+        <div id="top-posts-list"></div>
+      </div>
+      <div class="subreddit-table-card">
+        <h2>By Subreddit</h2>
+        <div id="subreddit-table"></div>
       </div>
     </div>
 
@@ -859,6 +1002,7 @@ let activeFilters = {
   source: 'all',
   platform: 'all',
   narrative: 'all',
+  direction: 'all',
   botMin: 0,
   search: '',
   sort: 'date-desc',
@@ -881,6 +1025,10 @@ async function init() {
     ? narrativeName(topNarrative[0]) + ' (' + topNarrative[1] + ')'
     : '—';
 
+  // Critical posts count
+  const criticalCount = (METADATA.by_direction || {}).critical || 0;
+  document.getElementById('stat-critical').textContent = criticalCount.toLocaleString();
+
   // Populate counts in sidebar
   updateSidebarCounts(allPosts);
 
@@ -893,8 +1041,16 @@ async function init() {
     archiveSelect.appendChild(opt);
   });
 
-  // Build trends chart
+  // Build trends chart + sentiment chart
   buildChart();
+  buildSentimentChart();
+
+  // Top posts + subreddit breakdown
+  buildTopPostsPanel();
+  buildSubredditTable();
+
+  // Velocity indicator
+  displayVelocity();
 
   // Burst warning banner
   if (METADATA.detected_bursts && METADATA.detected_bursts.length > 0) {
@@ -954,7 +1110,7 @@ async function init() {
 
       document.querySelectorAll(`.filter-chip[data-filter="${filterType}"]`).forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      activeFilters[filterType === 'source' ? 'source' : filterType === 'platform' ? 'platform' : 'narrative'] = value;
+      activeFilters[filterType === 'source' ? 'source' : filterType === 'platform' ? 'platform' : filterType === 'direction' ? 'direction' : 'narrative'] = value;
       applyFilters();
     });
   });
@@ -986,6 +1142,9 @@ function applyFilters() {
   }
   if (activeFilters.narrative !== 'all') {
     posts = posts.filter(p => (p.narratives || []).includes(activeFilters.narrative));
+  }
+  if (activeFilters.direction !== 'all') {
+    posts = posts.filter(p => (p.direction || 'neutral') === activeFilters.direction);
   }
   if (activeFilters.botMin > 0) {
     posts = posts.filter(p => (p.bot_score || 0) >= activeFilters.botMin);
@@ -1063,7 +1222,9 @@ function loadMore() {
 function buildCard(post) {
   const card = document.createElement('div');
   const botScore = post.bot_score || 0;
-  card.className = 'post-card' + (botScore >= 0.6 ? ' high-bot' : '');
+  const dir = post.direction || 'neutral';
+  card.className = 'post-card' + (botScore >= 0.6 ? ' high-bot' : '') +
+    (dir === 'critical' ? ' direction-critical' : dir === 'pro' ? ' direction-pro' : '');
 
   const botClass = botScore >= 0.6 ? 'bot-high' : botScore >= 0.35 ? 'bot-medium' : 'bot-low';
   const botLabel = botScore >= 0.6 ? '🤖 Bot suspect' : botScore >= 0.35 ? '⚠ Possible bot' : '✓ Likely human';
@@ -1150,18 +1311,27 @@ function updateSidebarCounts(posts) {
   });
 
   // Narrative counts
-  ['royalties','quality','anti-ceo','boycott-israel','degoogle','anti-spotify','pro-indie','switch-recommendation'].forEach(n => {
+  ['royalties','quality','anti-ceo','boycott-israel','degoogle','anti-spotify','pro-indie','switch-recommendation',
+   'app-issues','catalog-gaps','service-issues','pricing-complaints'].forEach(n => {
     const el = countEl(`count-n-${n}`);
     if (el) el.textContent = posts.filter(p => (p.narratives||[]).includes(n)).length;
   });
+
+  // Direction counts
+  ['pro', 'critical', 'neutral'].forEach(d => {
+    const el = countEl(`count-direction-${d}`);
+    if (el) el.textContent = posts.filter(p => (p.direction || 'neutral') === d).length;
+  });
+  const dirAllEl = countEl('count-direction-all');
+  if (dirAllEl) dirAllEl.textContent = posts.length;
 }
 
 // ── Chart ─────────────────────────────────────────────────────────────────────
 function buildChart() {
   const byMonth = METADATA.by_narrative_by_month || buildNarrativeByMonth(allPosts);
 
-  // Get last 12 months
-  const months = getLast12Months();
+  // Get last 6 months
+  const months = getLast6Months();
   const narrativeKeys = ['switch-recommendation','anti-spotify','royalties','quality','anti-ceo','boycott-israel'];
   const colors = ['#c2ffa0','#ff7ac2','#7ac2ff','#c27aff','#ff8080','#ffb347'];
 
@@ -1210,10 +1380,10 @@ function buildNarrativeByMonth(posts) {
   return result;
 }
 
-function getLast12Months() {
+function getLast6Months() {
   const months = [];
   const now = new Date();
-  for (let i = 11; i >= 0; i--) {
+  for (let i = 5; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
     months.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
   }
@@ -1222,7 +1392,7 @@ function getLast12Months() {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function resetFilters() {
-  activeFilters = { source: 'all', platform: 'all', narrative: 'all', botMin: 0, search: '', sort: 'date-desc' };
+  activeFilters = { source: 'all', platform: 'all', narrative: 'all', direction: 'all', botMin: 0, search: '', sort: 'date-desc' };
   document.getElementById('search-input').value = '';
   document.getElementById('bot-threshold').value = 0;
   document.getElementById('bot-threshold-value').textContent = '0%';
@@ -1245,6 +1415,10 @@ function narrativeName(key) {
     'anti-spotify': 'Anti-Spotify',
     'pro-indie': 'Pro-Indie',
     'switch-recommendation': 'Switch Rec.',
+    'app-issues': 'App Issues',
+    'catalog-gaps': 'Catalog Gaps',
+    'service-issues': 'Service Issues',
+    'pricing-complaints': 'Pricing',
   }[key] || key;
 }
 
@@ -1369,7 +1543,7 @@ function closeAuthorPanel() {
 
 // ── CSV Export ─────────────────────────────────────────────────────────────────
 function exportCSV() {
-  const cols = ['date','source','type','author','subreddit','title','narratives','platform_from','score','bot_score','bot_signals','campaign_burst','url'];
+  const cols = ['date','source','type','author','subreddit','title','narratives','direction','platform_from','score','bot_score','bot_signals','campaign_burst','url'];
   const rows = [cols.join(',')];
   filteredPosts.forEach(p => {
     const vals = cols.map(c => {
@@ -1393,6 +1567,131 @@ function exportCSV() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+// ── Direction by month (client-side fallback) ─────────────────────────────────
+function buildDirectionByMonth(posts) {
+  const result = {};
+  posts.forEach(p => {
+    const month = (p.date || '').substring(0, 7);
+    if (!month) return;
+    if (!result[month]) result[month] = { pro: 0, critical: 0, neutral: 0 };
+    const d = p.direction || 'neutral';
+    result[month][d] = (result[month][d] || 0) + 1;
+  });
+  return result;
+}
+
+// ── Sentiment balance chart ───────────────────────────────────────────────────
+function buildSentimentChart() {
+  const byMonth = METADATA.by_direction_by_month || buildDirectionByMonth(allPosts);
+  const months = getLast6Months();
+
+  new Chart(document.getElementById('sentiment-chart'), {
+    type: 'bar',
+    data: {
+      labels: months.map(m => formatMonth(m)),
+      datasets: [
+        {
+          label: 'Pro-Qobuz',
+          data: months.map(m => (byMonth[m] || {}).pro || 0),
+          backgroundColor: 'rgba(194,255,160,0.6)',
+          borderColor: '#c2ffa0',
+          borderWidth: 1,
+        },
+        {
+          label: 'Critical',
+          data: months.map(m => (byMonth[m] || {}).critical || 0),
+          backgroundColor: 'rgba(255,170,68,0.6)',
+          borderColor: '#ffaa44',
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#a0a0c0', font: { size: 11 }, boxWidth: 12 } },
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: '#6b6b88', font: { size: 10 } }, grid: { color: '#2a2a3a' } },
+        y: { stacked: true, ticks: { color: '#6b6b88', font: { size: 10 } }, grid: { color: '#2a2a3a' } },
+      },
+    },
+  });
+}
+
+// ── Top posts this week ────────────────────────────────────────────────────────
+function buildTopPostsPanel() {
+  const now = new Date();
+  const weekAgo = new Date(now - 7 * 24 * 3600 * 1000).toISOString();
+  const topPosts = allPosts
+    .filter(p => p.date && p.date >= weekAgo && (p.score || 0) > 0)
+    .sort((a, b) => (b.score || 0) - (a.score || 0))
+    .slice(0, 3);
+
+  const container = document.getElementById('top-posts-list');
+  if (!topPosts.length) {
+    container.innerHTML = `<div style="color:var(--muted);font-size:12px;padding:12px 0">No scored posts in the last 7 days.</div>`;
+    return;
+  }
+  const ranks = ['①', '②', '③'];
+  container.innerHTML = topPosts.map((p, i) => `
+    <div class="top-post-item">
+      <div class="top-post-rank">${ranks[i]}</div>
+      <div class="top-post-body">
+        <div class="top-post-title">
+          <a href="${escHtml(p.url)}" target="_blank" rel="noopener">${escHtml(p.title || (p.text||'').substring(0,100) || '(no title)')}</a>
+        </div>
+        <div class="top-post-meta">
+          <span style="color:var(--ok)">▲ ${Number(p.score).toLocaleString()}</span>
+          <span>${p.subreddit || p.source}</span>
+          <span>${formatDate(p.date).split(',')[0]}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── Subreddit breakdown ────────────────────────────────────────────────────────
+function buildSubredditTable() {
+  const counts = {};
+  allPosts.forEach(p => {
+    if (p.subreddit) counts[p.subreddit] = (counts[p.subreddit] || 0) + 1;
+  });
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  if (!sorted.length) {
+    document.getElementById('subreddit-table').innerHTML =
+      `<div style="color:var(--muted);font-size:12px">No subreddit data.</div>`;
+    return;
+  }
+  const max = sorted[0][1];
+  document.getElementById('subreddit-table').innerHTML = sorted.map(([name, count]) => `
+    <div class="subreddit-row">
+      <span class="subreddit-name">${escHtml(name)}</span>
+      <div class="subreddit-bar-wrap"><div class="subreddit-bar" style="width:${Math.round(count/max*100)}%"></div></div>
+      <span class="subreddit-count">${count}</span>
+    </div>`).join('');
+}
+
+// ── Velocity ──────────────────────────────────────────────────────────────────
+function displayVelocity() {
+  const now = new Date();
+  const weekAgo = new Date(now - 7 * 24 * 3600 * 1000).toISOString();
+  const twoWeeksAgo = new Date(now - 14 * 24 * 3600 * 1000).toISOString();
+  const thisWeek = allPosts.filter(p => p.date && p.date >= weekAgo).length;
+  const lastWeek = allPosts.filter(p => p.date && p.date >= twoWeeksAgo && p.date < weekAgo).length;
+  const el = document.getElementById('stat-velocity');
+  if (!el) return;
+  if (lastWeek === 0 && thisWeek === 0) { el.innerHTML = ''; return; }
+  if (lastWeek === 0) {
+    el.innerHTML = `<span class="velocity-badge velocity-up">new</span>`;
+  } else {
+    const pct = Math.round((thisWeek - lastWeek) / lastWeek * 100);
+    const cls = pct > 0 ? 'velocity-up' : pct < 0 ? 'velocity-down' : 'velocity-flat';
+    const arrow = pct > 0 ? '↑' : pct < 0 ? '↓' : '→';
+    el.innerHTML = `<span class="velocity-badge ${cls}">${arrow}${Math.abs(pct)}%</span>`;
+  }
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
