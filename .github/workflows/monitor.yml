@@ -1,0 +1,63 @@
+name: Qobuz Nonsense Monitor
+
+on:
+  schedule:
+    # Every 3 hours, UTC
+    - cron: '0 */3 * * *'
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Collect data
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+        run: python scripts/collect.py
+
+      - name: Build site HTML
+        run: python scripts/build_site.py
+
+      - name: Set up Node.js (for StaticCrypt)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Encrypt with StaticCrypt
+        run: |
+          npx staticrypt@3 index_plain.html \
+            --password "${{ secrets.SITE_PASSWORD }}" \
+            --short \
+            --remember 30 \
+            --template-title "Qobuz Nonsense" \
+            --template-instructions "Enter your 5-digit access code" \
+            --template-color-primary "#c27aff" \
+            --template-color-secondary "#0a0a0f"
+          cp encrypted/index_plain.html index.html
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ index.html
+          git diff --staged --quiet || git commit -m "Monitor update: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push

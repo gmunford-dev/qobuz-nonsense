@@ -1,0 +1,16 @@
+# Generated files (rebuilt by CI)
+index_plain.html
+encrypted/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Env files (never commit credentials)
+.env

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "qobuz-nonsense",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "3847"],
+      "port": 3847
+    }
+  ]
+}

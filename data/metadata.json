@@ -1,0 +1,31 @@
+{
+  "last_updated": "2026-02-21T00:00:00Z",
+  "total_posts": 12,
+  "posts_this_week": 4,
+  "high_bot_suspicion_count": 5,
+  "by_source": {
+    "reddit": 9,
+    "news": 2,
+    "twitter": 1
+  },
+  "by_narrative": {
+    "switch-recommendation": 10,
+    "anti-spotify": 6,
+    "royalties": 7,
+    "quality": 5,
+    "boycott-israel": 3,
+    "anti-ceo": 2,
+    "degoogle": 1,
+    "pro-indie": 2
+  },
+  "by_platform_from": {
+    "spotify": 9,
+    "amazon": 1,
+    "generic": 2
+  },
+  "by_month": {
+    "2026-02": 4,
+    "2026-01": 8
+  },
+  "detected_bursts": []
+}
