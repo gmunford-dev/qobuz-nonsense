@@ -4179,27 +4179,5 @@
     "bot_score": 0.0,
     "bot_signals": [],
     "campaign_burst": false
-  },
-  {
-    "id": "reddit_1ql019z",
-    "source": "reddit",
-    "type": "post",
-    "platform_from": "apple",
-    "narratives": [],
-    "direction": "neutral",
-    "url": "https://reddit.com/r/audiophile/comments/1ql019z/what_is_the_best_store_to_buy_digital_music_from/",
-    "title": "What is the best store to buy (digital) music from?",
-    "text": "I want to start buying to own. The only online store I knew of was itunes. However, I've since learned about others like Qobuz and HD Music.\n\nComparing prices, itunes still seems like the best option since the same songs/albums are slightly cheaper to buy. I don't see any other differences.\n\nSo should I always buy from itunes? Why would I buy from anywhere else?",
-    "author": "Oarvick",
-    "author_age_days": null,
-    "author_karma": null,
-    "subreddit": "r/audiophile",
-    "date": "2026-01-23T19:15:27+00:00",
-    "score": 4,
-    "num_comments": 21,
-    "discovered": "2026-02-22T00:37:18.713397+00:00",
-    "bot_score": 0.0,
-    "bot_signals": [],
-    "campaign_burst": false
   }
 ]
