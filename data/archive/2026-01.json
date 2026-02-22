@@ -1,5 +1,31 @@
 [
   {
+    "id": "reddit_1qkh4wa",
+    "source": "reddit",
+    "type": "post",
+    "platform_from": "spotify",
+    "narratives": [
+      "switch-recommendation"
+    ],
+    "direction": "pro",
+    "url": "https://reddit.com/r/qobuz/comments/1qkh4wa/any_apps_that_track_your_music_listening_data/",
+    "title": "Any apps that track your music listening data that you can share with your friends that service Qobuz?",
+    "text": "Just transferred over from Spotify and used to use Airbuds with my friends and it was a great time. Wondering if there's anything similar to that that service Qobuz?",
+    "author": "drstubbs77",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": "r/qobuz",
+    "date": "2026-01-23T04:30:31+00:00",
+    "score": 9,
+    "num_comments": 6,
+    "discovered": "2026-02-22T00:37:18.713397+00:00",
+    "bot_score": 0.08,
+    "bot_signals": [
+      "odd_hour_post"
+    ],
+    "campaign_burst": false
+  },
+  {
     "id": "reddit_1qkdk69",
     "source": "reddit",
     "type": "post",
