@@ -1,40 +1,459 @@
 {
-  "last_updated": "2026-02-21T00:00:00Z",
-  "total_posts": 12,
-  "posts_this_week": 4,
-  "high_bot_suspicion_count": 5,
+  "last_updated": "2026-02-22T00:38:44.697517+00:00",
+  "total_posts": 303,
+  "posts_this_week": 61,
+  "high_bot_suspicion_count": 3,
   "by_source": {
-    "reddit": 9,
-    "news": 2,
+    "reddit": 175,
+    "news": 127,
     "twitter": 1
   },
   "by_narrative": {
-    "switch-recommendation": 10,
-    "anti-spotify": 6,
-    "royalties": 7,
-    "quality": 5,
-    "boycott-israel": 3,
-    "anti-ceo": 2,
-    "degoogle": 1,
-    "pro-indie": 2
+    "quality": 120,
+    "switch-recommendation": 48,
+    "anti-ceo": 45,
+    "app-issues": 34,
+    "degoogle": 22,
+    "anti-spotify": 19,
+    "catalog-gaps": 19,
+    "royalties": 15,
+    "pro-indie": 11,
+    "boycott-israel": 7,
+    "service-issues": 4,
+    "pricing-complaints": 2
   },
   "by_platform_from": {
-    "spotify": 9,
-    "amazon": 1,
-    "generic": 2
+    "spotify": 110,
+    "amazon": 11,
+    "generic": 140,
+    "apple": 12,
+    "tidal": 27,
+    "youtube": 3
   },
   "by_month": {
-    "2026-02": 4,
-    "2026-01": 8
+    "2026-02": 136,
+    "2026-01": 46,
+    "2025-12": 3,
+    "2025-11": 2,
+    "2025-10": 7,
+    "2025-09": 4,
+    "2025-08": 2,
+    "2025-07": 2,
+    "2025-06": 3,
+    "2025-05": 9,
+    "2025-04": 3,
+    "2025-03": 12,
+    "2025-02": 4,
+    "2025-01": 3,
+    "2024-12": 1,
+    "2024-11": 1,
+    "2024-10": 3,
+    "2024-09": 1,
+    "2024-08": 1,
+    "2024-07": 1,
+    "2024-03": 3,
+    "2024-02": 1,
+    "2024-01": 1,
+    "2023-12": 1,
+    "2023-08": 1,
+    "2023-07": 1,
+    "2023-06": 2,
+    "2023-04": 1,
+    "2023-03": 3,
+    "2023-02": 1,
+    "2022-12": 1,
+    "2022-11": 1,
+    "2022-08": 1,
+    "2022-07": 2,
+    "2022-04": 1,
+    "2022-02": 1,
+    "2022-01": 1,
+    "2021-12": 1,
+    "2021-10": 1,
+    "2021-09": 1,
+    "2021-07": 1,
+    "2021-04": 1,
+    "2021-03": 1,
+    "2020-11": 1,
+    "2020-03": 1,
+    "2020-01": 1,
+    "2019-12": 1,
+    "2019-11": 1,
+    "2019-10": 2,
+    "2019-04": 1,
+    "2019-03": 1,
+    "2019-02": 4,
+    "2018-11": 1,
+    "2018-08": 1,
+    "2018-07": 1,
+    "2018-04": 1,
+    "2018-02": 1,
+    "2017-12": 1,
+    "2017-09": 1,
+    "2016-03": 1,
+    "2015-12": 1,
+    "2015-10": 1,
+    "2015-06": 2,
+    "2015-03": 1,
+    "2014-09": 1,
+    "2014-08": 1,
+    "2014-06": 1,
+    "2014-05": 1
   },
   "by_direction": {
-    "pro": 12,
-    "critical": 0,
-    "neutral": 0
+    "pro": 49,
+    "critical": 57,
+    "neutral": 197
   },
   "by_direction_by_month": {
-    "2026-02": { "pro": 4, "critical": 0, "neutral": 0 },
-    "2026-01": { "pro": 8, "critical": 0, "neutral": 0 }
+    "2026-02": {
+      "pro": 34,
+      "critical": 43,
+      "neutral": 59
+    },
+    "2026-01": {
+      "pro": 15,
+      "critical": 13,
+      "neutral": 18
+    },
+    "2025-12": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 3
+    },
+    "2025-11": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 2
+    },
+    "2025-10": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 7
+    },
+    "2025-09": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 4
+    },
+    "2025-08": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 2
+    },
+    "2025-07": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 2
+    },
+    "2025-06": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 3
+    },
+    "2025-05": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 9
+    },
+    "2025-04": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 3
+    },
+    "2025-03": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 12
+    },
+    "2025-02": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 4
+    },
+    "2025-01": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 3
+    },
+    "2024-12": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2024-11": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2024-10": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 3
+    },
+    "2024-09": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2024-08": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2024-07": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2024-03": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 3
+    },
+    "2024-02": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2024-01": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2023-12": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2023-08": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2023-07": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2023-06": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 2
+    },
+    "2023-04": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2023-03": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 3
+    },
+    "2023-02": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2022-12": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2022-11": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2022-08": {
+      "pro": 0,
+      "critical": 1,
+      "neutral": 0
+    },
+    "2022-07": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 2
+    },
+    "2022-04": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2022-02": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2022-01": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2021-12": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2021-10": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2021-09": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2021-07": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2021-04": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2021-03": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2020-11": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2020-03": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2020-01": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2019-12": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2019-11": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2019-10": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 2
+    },
+    "2019-04": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2019-03": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2019-02": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 4
+    },
+    "2018-11": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2018-08": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2018-07": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2018-04": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2018-02": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2017-12": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2017-09": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2016-03": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2015-12": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2015-10": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2015-06": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 2
+    },
+    "2015-03": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2014-09": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2014-08": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2014-06": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    },
+    "2014-05": {
+      "pro": 0,
+      "critical": 0,
+      "neutral": 1
+    }
   },
-  "detected_bursts": []
+  "detected_bursts": [
+    {
+      "narrative": "switch-recommendation",
+      "count": 3,
+      "start": "2026-01-16T02:14:00+00:00",
+      "end": "2026-01-18T05:30:00+00:00",
+      "hours_span": 51.3
+    }
+  ]
 }

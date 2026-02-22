@@ -7,10 +7,13 @@ mentioning Qobuz switching campaigns.
 Runs every 3 hours via GitHub Actions.
 """
 
+from __future__ import annotations
+
 import os
 import re
 import sys
 import json
+import time
 import hashlib
 import urllib.request
 import urllib.parse
@@ -94,7 +97,9 @@ DIRECT_RSS_FEEDS = [
     ("Music Business Worldwide", "https://www.musicbusinessworldwide.com/feed/"),
     ("Digital Music News", "https://www.digitalmusicnews.com/feed/"),
     ("The Ear", "https://the-ear.net/feed/"),
-    ("Hifi News", "https://www.hifinews.com/feed"),
+    ("What Hi-Fi", "https://www.whathifi.com/rss"),
+    ("Stereophile", "https://www.stereophile.com/rss.xml"),
+    # Hifi News removed — returns HTTP 404
 ]
 
 # ─── Direction detection ──────────────────────────────────────────────────────
@@ -539,87 +544,130 @@ def collect_news(existing_ids: set) -> list[dict]:
     return posts
 
 
-# ─── X / Twitter (snscrape) ───────────────────────────────────────────────────
+# ─── X / Twitter ─────────────────────────────────────────────────────────────
 
 def collect_twitter(existing_ids: set) -> list[dict]:
-    """Collect X/Twitter posts using snscrape (no auth required)."""
+    """X/Twitter collection disabled.
+
+    snscrape was removed — it uses the find_module() import API that was
+    removed in Python 3.12 (AttributeError at import time). The library is
+    also unmaintained since Twitter/X closed its public API in 2023.
+
+    To re-enable: implement via the official X API v2 (requires Bearer token
+    in TWITTER_BEARER_TOKEN secret) using the requests library.
+    """
+    print("  X/Twitter: skipped (snscrape removed — see collect.py for details)")
+    return []
+
+
+# ─── Reddit (public JSON API — no auth required) ──────────────────────────────
+
+def _process_reddit_public_post(p: dict, posts: list, seen: set,
+                                 existing_ids: set, now: str):
+    """Parse one post dict from Reddit's public JSON API and append to posts."""
+    raw_id = p.get("id", "")
+    if not raw_id:
+        return
+
+    pid = make_id("reddit", raw_id)
+    if pid in existing_ids or pid in seen:
+        return
+    seen.add(pid)
+
+    title = (p.get("title") or "").strip()
+    body = (p.get("selftext") or "").strip()
+    full_text = title + " " + body
+
+    # Skip if Qobuz not mentioned (catches noise from broad subreddit scans)
+    if "qobuz" not in full_text.lower():
+        return
+
+    # Skip deleted/removed posts
+    if body in ("[deleted]", "[removed]"):
+        body = ""
+        full_text = title
+
+    author_name = str(p.get("author") or "[deleted]")
+    subreddit_name = p.get("subreddit_name_prefixed") or f"r/{p.get('subreddit', '?')}"
+
+    created_utc = p.get("created_utc") or p.get("created", 0)
     try:
-        import snscrape.modules.twitter as sntwitter
-    except ImportError:
-        print("snscrape not installed, skipping Twitter/X.")
-        return []
+        date_iso = datetime.fromtimestamp(float(created_utc), timezone.utc).isoformat()
+    except Exception:
+        date_iso = now
 
+    permalink = p.get("permalink", "")
+    url = f"https://reddit.com{permalink}" if permalink else f"https://reddit.com/r/{p.get('subreddit', '')}"
+
+    narratives = tag_narratives(full_text)
+    post = {
+        "id": pid,
+        "source": "reddit",
+        "type": "post",
+        "platform_from": detect_platform_from(full_text),
+        "narratives": narratives,
+        "direction": detect_direction(full_text, narratives),
+        "url": url,
+        "title": title[:300],
+        "text": body[:600],
+        "author": author_name,
+        "author_age_days": None,   # not available from public API
+        "author_karma": None,      # not available from public API
+        "subreddit": subreddit_name,
+        "date": date_iso,
+        "score": int(p.get("score") or 0),
+        "num_comments": int(p.get("num_comments") or 0),
+        "discovered": now,
+        "bot_score": 0.0,
+        "bot_signals": [],
+        "campaign_burst": False,
+    }
+    posts.append(post)
+
+
+def collect_reddit_public(existing_ids: set) -> list[dict]:
+    """Collect Reddit posts via the public JSON API (no credentials required).
+
+    Used as fallback when PRAW OAuth secrets are not configured.
+    Rate-limited to ~1 req/s to stay well within Reddit's anonymous limits.
+    """
+    BASE = "https://www.reddit.com"
+    HEADERS = {"User-Agent": "qobuz-nonsense-monitor/1.0 (github.com/gmunford-dev/qobuz-nonsense)"}
+    posts: list[dict] = []
+    seen: set[str] = set()
     now = datetime.now(timezone.utc).isoformat()
-    posts = []
-    seen_this_run = set()
 
-    twitter_queries = [
-        "Qobuz Spotify lang:en",
-        "switch Qobuz lang:en",
-        "Qobuz alternative lang:en",
-        "switched Qobuz lang:en",
-    ]
-
-    print("Collecting X/Twitter posts...")
-
-    for query in twitter_queries:
+    def fetch_reddit_json(url: str) -> dict | None:
+        req = urllib.request.Request(url, headers=HEADERS)
         try:
-            scraper = sntwitter.TwitterSearchScraper(query)
-            count = 0
-            for tweet in scraper.get_items():
-                if count >= 30:
-                    break
-                count += 1
-
-                pid = make_id("twitter", str(tweet.id))
-                if pid in existing_ids or pid in seen_this_run:
-                    continue
-                seen_this_run.add(pid)
-
-                text = getattr(tweet, "rawContent", "") or ""
-                if "qobuz" not in text.lower():
-                    continue
-
-                try:
-                    author_name = tweet.user.username if tweet.user else "unknown"
-                    account_created = getattr(tweet.user, "created", None)
-                    age_days = None
-                    if account_created:
-                        if hasattr(account_created, "timestamp"):
-                            age_seconds = datetime.now(timezone.utc).timestamp() - account_created.timestamp()
-                            age_days = int(age_seconds / 86400)
-                except Exception:
-                    author_name = "unknown"
-                    age_days = None
-
-                tweet_narratives = tag_narratives(text)
-                post = {
-                    "id": pid,
-                    "source": "twitter",
-                    "type": "tweet",
-                    "platform_from": detect_platform_from(text),
-                    "narratives": tweet_narratives,
-                    "direction": detect_direction(text, tweet_narratives),
-                    "url": f"https://x.com/{author_name}/status/{tweet.id}",
-                    "title": text[:120] + ("…" if len(text) > 120 else ""),
-                    "text": text[:600],
-                    "author": author_name,
-                    "author_age_days": age_days,
-                    "author_karma": getattr(tweet.user, "followersCount", None) if tweet.user else None,
-                    "subreddit": None,
-                    "date": tweet.date.isoformat() if tweet.date else now,
-                    "score": getattr(tweet, "likeCount", 0) or 0,
-                    "num_comments": getattr(tweet, "replyCount", 0) or 0,
-                    "discovered": now,
-                    "bot_score": 0.0,
-                    "bot_signals": [],
-                    "campaign_burst": False,
-                }
-                posts.append(post)
+            with urllib.request.urlopen(req, timeout=15) as r:
+                return json.loads(r.read().decode("utf-8", errors="ignore"))
         except Exception as e:
-            print(f"  Twitter scrape error for '{query}': {e}")
+            print(f"    Reddit public fetch error ({url[:60]}…): {e}")
+            return None
 
-    print(f"  Twitter: {len(posts)} new tweets found")
+    print("Collecting Reddit posts (public API — no auth)...")
+
+    # 1. Cross-Reddit keyword searches (first 20 queries to avoid rate limits)
+    for query in REDDIT_QUERIES[:20]:
+        encoded = urllib.parse.quote(query)
+        url = f"{BASE}/search.json?q={encoded}&sort=new&t=month&limit=25&type=link"
+        data = fetch_reddit_json(url)
+        if data:
+            for child in data.get("data", {}).get("children", []):
+                _process_reddit_public_post(child.get("data", {}), posts, seen, existing_ids, now)
+        time.sleep(1.1)  # ~54 req/min max; Reddit anonymous limit is ~60/min
+
+    # 2. Subreddit-targeted scans — search for "qobuz" within each subreddit
+    for sr_name in REDDIT_SUBREDDITS:
+        url = f"{BASE}/r/{sr_name}/search.json?q=qobuz&sort=new&t=month&limit=25&restrict_sr=1"
+        data = fetch_reddit_json(url)
+        if data:
+            for child in data.get("data", {}).get("children", []):
+                _process_reddit_public_post(child.get("data", {}), posts, seen, existing_ids, now)
+        time.sleep(1.1)
+
+    print(f"  Reddit (public API): {len(posts)} new posts found")
     return posts
 
 
@@ -773,7 +821,17 @@ def main():
 
     # Collect new posts from all sources
     new_posts = []
-    new_posts += collect_reddit(existing_ids)
+    reddit_creds = all([
+        os.getenv("REDDIT_CLIENT_ID"),
+        os.getenv("REDDIT_CLIENT_SECRET"),
+        os.getenv("REDDIT_USERNAME"),
+        os.getenv("REDDIT_PASSWORD"),
+    ])
+    if reddit_creds:
+        new_posts += collect_reddit(existing_ids)          # authenticated PRAW
+    else:
+        print("Reddit OAuth credentials not set — using public API fallback.")
+        new_posts += collect_reddit_public(existing_ids)   # no-auth fallback
     new_posts += collect_news(existing_ids)
     new_posts += collect_twitter(existing_ids)
 
@@ -815,5 +873,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import urllib.parse
     main()

@@ -1,0 +1,271 @@
+[
+  {
+    "id": "reddit_1qk3311",
+    "source": "reddit",
+    "type": "post",
+    "platform_from": "spotify",
+    "narratives": [
+      "anti-spotify"
+    ],
+    "direction": "critical",
+    "url": "https://reddit.com/r/TIdaL/comments/1qk3311/tidal_not_compatible_with_iphone/",
+    "title": "Tidal not Compatible with iPhone?",
+    "text": "Recently, I've made the decision to leave Spotify completely (for a myriad of reasons). I first tried out Qobuz, and now Tidal. For some reason, my Tidal app will crash multiple times throughout the day, it takes forever to load my \"Tracks\" and today, more than half of my saved tracks randomly disappeared from my library. I've tried deleting and redownload the app multiple times and signing in and out multiple times. There are plenty of things that I like about this platform, but these issues in particular have become a large disruption. Is there anything else I could try to resolve these issu",
+    "author": "Tinfoilbrains",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": "r/TIdaL",
+    "date": "2026-01-22T18:50:24+00:00",
+    "score": 0,
+    "num_comments": 16,
+    "discovered": "2026-02-22T00:37:18.713397+00:00",
+    "bot_score": 0.0,
+    "bot_signals": [],
+    "campaign_burst": false
+  },
+  {
+    "id": "news_the_ear_royalties",
+    "source": "news",
+    "type": "article",
+    "platform_from": "generic",
+    "narratives": [
+      "royalties",
+      "pro-indie"
+    ],
+    "direction": "pro",
+    "url": "https://the-ear.net/news/qobuz-pays-artists-5x-more-to-artists/",
+    "title": "Qobuz pays artists 5x more than Spotify, new report confirms",
+    "text": "Industry analysis shows Qobuz redistributed royalties due to quality and sustainable musical ecosystem commitments. The French streaming service continues to position itself as the ethical alternative.",
+    "author": "The Ear",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2026-01-22T08:30:00Z",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-01T00:00:00Z",
+    "bot_score": 0.0,
+    "bot_signals": [],
+    "campaign_burst": false
+  },
+  {
+    "id": "reddit_1jqhdmq_ml73965",
+    "source": "reddit",
+    "type": "comment",
+    "platform_from": "amazon",
+    "narratives": [
+      "degoogle",
+      "switch-recommendation",
+      "quality"
+    ],
+    "direction": "pro",
+    "url": "https://www.reddit.com/r/degoogle/comments/1jqhdmq/comment/ml73965/",
+    "title": "Just dropped Amazon Music and went with Qobuz. No Amazon, no Google, no Spotify — just pure lossless music from a company that isn't trying to surveil you.",
+    "text": "Just dropped Amazon Music and went with Qobuz. No Amazon, no Google, no Spotify — just pure lossless music from a company that isn't trying to surveil you. The sound quality improvement alone is worth it.",
+    "author": "privacy_maximalist_99",
+    "author_age_days": 62,
+    "author_karma": 445,
+    "subreddit": "r/degoogle",
+    "date": "2026-01-20T16:05:00Z",
+    "score": 312,
+    "num_comments": 0,
+    "discovered": "2026-02-01T00:00:00Z",
+    "bot_score": 0.3,
+    "bot_signals": [
+      "new_account"
+    ],
+    "campaign_burst": false
+  },
+  {
+    "id": "reddit_comment_boycott_link",
+    "source": "reddit",
+    "type": "comment",
+    "platform_from": "spotify",
+    "narratives": [
+      "boycott-israel",
+      "switch-recommendation"
+    ],
+    "direction": "pro",
+    "url": "https://www.reddit.com/r/BoycottIsrael/comments/1mhx35i/qobuz_alternative_to_mainstream_israeli/",
+    "title": "Here's the link to the Qobuz artist pay page that proves they support independent artists ethically.",
+    "text": "Here's the link to the Qobuz artist pay page that proves they support independent artists ethically. French company, not tied to US tech VC money or Israeli investment.",
+    "author": "solidarity_streamer",
+    "author_age_days": 19,
+    "author_karma": 6,
+    "subreddit": "r/BoycottIsrael",
+    "date": "2026-01-18T05:30:00Z",
+    "score": 78,
+    "num_comments": 0,
+    "discovered": "2026-02-01T00:00:00Z",
+    "bot_score": 0.83,
+    "bot_signals": [
+      "very_new_account",
+      "very_low_karma",
+      "odd_hour_post",
+      "new_and_low_karma"
+    ],
+    "campaign_burst": true
+  },
+  {
+    "id": "reddit_1mhx35i",
+    "source": "reddit",
+    "type": "post",
+    "platform_from": "spotify",
+    "narratives": [
+      "boycott-israel",
+      "switch-recommendation"
+    ],
+    "direction": "pro",
+    "url": "https://www.reddit.com/r/BoycottIsrael/comments/1mhx35i/qobuz_alternative_to_mainstream_israeli/",
+    "title": "Qobuz — alternative to mainstream Israeli-adjacent streaming services",
+    "text": "French-owned, independent, pays artists fairly. Not connected to any Israeli investment groups unlike some of the major platforms.",
+    "author": "BDS_advocate_2024",
+    "author_age_days": 28,
+    "author_karma": 14,
+    "subreddit": "r/BoycottIsrael",
+    "date": "2026-01-18T03:45:00Z",
+    "score": 203,
+    "num_comments": 87,
+    "discovered": "2026-02-01T00:00:00Z",
+    "bot_score": 0.78,
+    "bot_signals": [
+      "very_new_account",
+      "very_low_karma",
+      "odd_hour_post",
+      "new_and_low_karma"
+    ],
+    "campaign_burst": true
+  },
+  {
+    "id": "reddit_comment_n79yc55",
+    "source": "reddit",
+    "type": "comment",
+    "platform_from": "spotify",
+    "narratives": [
+      "switch-recommendation",
+      "quality",
+      "royalties"
+    ],
+    "direction": "pro",
+    "url": "https://www.reddit.com/r/fantanoforever/comments/1miukb6/comment/n79yc55/",
+    "title": "Switched from Spotify to Qobuz last month and haven't looked back. Lossless audio changes everything if you have good headphones.",
+    "text": "Switched from Spotify to Qobuz last month and haven't looked back. Lossless audio changes everything if you have good headphones. Plus they pay artists 5x more than Spotify which matters to me as someone who goes to shows.",
+    "author": "Unfair_Enthusiasm696",
+    "author_age_days": 43,
+    "author_karma": 87,
+    "subreddit": "r/fantanoforever",
+    "date": "2026-01-16T02:14:00Z",
+    "score": 124,
+    "num_comments": 0,
+    "discovered": "2026-02-01T00:00:00Z",
+    "bot_score": 0.55,
+    "bot_signals": [
+      "new_account",
+      "low_karma",
+      "odd_hour_post"
+    ],
+    "campaign_burst": true
+  },
+  {
+    "id": "reddit_1miukb6",
+    "source": "reddit",
+    "type": "post",
+    "platform_from": "spotify",
+    "narratives": [
+      "anti-spotify",
+      "switch-recommendation",
+      "royalties"
+    ],
+    "direction": "pro",
+    "url": "https://www.reddit.com/r/fantanoforever/comments/1miukb6/megathread_spotify_alternativesleaving_spotify/",
+    "title": "Megathread: Spotify alternatives/leaving Spotify",
+    "text": "Can't recommend Qobuz enough. The sound quality is insane, and the fact that they pay artists significantly more than Spotify makes it a no-brainer for anyone who actually cares about music.",
+    "author": "fantano_mod",
+    "author_age_days": 1842,
+    "author_karma": 24500,
+    "subreddit": "r/fantanoforever",
+    "date": "2026-01-15T14:32:00Z",
+    "score": 847,
+    "num_comments": 312,
+    "discovered": "2026-02-01T00:00:00Z",
+    "bot_score": 0.05,
+    "bot_signals": [],
+    "campaign_burst": false
+  },
+  {
+    "id": "reddit_tidal_mgfz3n",
+    "source": "reddit",
+    "type": "post",
+    "platform_from": "spotify",
+    "narratives": [
+      "switch-recommendation",
+      "quality"
+    ],
+    "direction": "pro",
+    "url": "https://www.reddit.com/r/TIdaL/comments/1mgfz3n/i_want_to_switch_away_from_spotify_does_tidal_do/",
+    "title": "I want to switch away from Spotify — does Tidal do everything Qobuz does?",
+    "text": "I've been hearing a lot about Qobuz lately. Is it better than Tidal? The lossless quality and artist pay thing keeps coming up in my feeds.",
+    "author": "HifiNewbie2026",
+    "author_age_days": 71,
+    "author_karma": 234,
+    "subreddit": "r/TIdaL",
+    "date": "2026-01-12T18:45:00Z",
+    "score": 156,
+    "num_comments": 67,
+    "discovered": "2026-02-01T00:00:00Z",
+    "bot_score": 0.2,
+    "bot_signals": [
+      "new_account"
+    ],
+    "campaign_burst": false
+  },
+  {
+    "id": "reddit_1mgcbu5",
+    "source": "reddit",
+    "type": "post",
+    "platform_from": "spotify",
+    "narratives": [
+      "anti-ceo",
+      "anti-spotify",
+      "switch-recommendation"
+    ],
+    "direction": "pro",
+    "url": "https://www.reddit.com/r/Music/comments/1mgcbu5/spotify_ceo_investments_700m_in_ai_drone_weapons/",
+    "title": "Spotify CEO investments $700M in AI drone & weapons companies — switch to Qobuz",
+    "text": "Daniel Ek has invested heavily in weapons and drone technology. If you care about where your money goes, Qobuz is the ethical streaming alternative that actually pays artists.",
+    "author": "absurdwifi",
+    "author_age_days": 156,
+    "author_karma": 2340,
+    "subreddit": "r/Music",
+    "date": "2026-01-10T11:22:00Z",
+    "score": 4821,
+    "num_comments": 892,
+    "discovered": "2026-02-01T00:00:00Z",
+    "bot_score": 0.0,
+    "bot_signals": [],
+    "campaign_burst": false
+  },
+  {
+    "id": "news_3d7180fee8c4",
+    "source": "news",
+    "type": "article",
+    "platform_from": "generic",
+    "narratives": [
+      "catalog-gaps"
+    ],
+    "direction": "critical",
+    "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOekdUV0Zhak1VcEJRQ0FIbWxuQUJJSHVnX2piMVUzcXRxOHdvN2lvSWR5YUxNNmU3akdocnF2bmtiSDJXZGZnVHhZTGlwTDVqUmwwN2Nfc1FYWVlzbVNXV2tkR01PY1hicF9oQmtfRXVrQjZRMjBIVW1aVXNfSUItUkowTjBXMHMxZ3E3aUJvQ08?oc=5",
+    "title": "Qobuz Director Explains Why the $12.99 Streaming Service Still Has Broken Search, Missing Albums, and No Dolby Atmos - Headphonesty",
+    "text": "<a href=\"https://news.google.com/rss/articles/CBMikAFBVV95cUxOekdUV0Zhak1VcEJRQ0FIbWxuQUJJSHVnX2piMVUzcXRxOHdvN2lvSWR5YUxNNmU3akdocnF2bmtiSDJXZGZnVHhZTGlwTDVqUmwwN2Nfc1FYWVlzbVNXV2tkR01PY1hicF9oQmtfRXVrQjZRMjBIVW1aVXNfSUItUkowTjBXMHMxZ3E3aUJvQ08?oc=5\" target=\"_blank\">Qobuz Director Explains Why the $12.99 Streaming Service Still Has Broken Search, Missing Albums, and No Dolby Atmos</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Headphonesty</font>",
+    "author": "Headphonesty",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2026-01-06T08:00:00+00:00",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-22T00:38:15.129626+00:00",
+    "bot_score": 0.0,
+    "bot_signals": []
+  }
+]
