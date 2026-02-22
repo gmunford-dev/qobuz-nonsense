@@ -207,6 +207,27 @@
     "campaign_burst": true
   },
   {
+    "id": "news_6b88a48d55ee",
+    "source": "news",
+    "type": "article",
+    "platform_from": "spotify",
+    "narratives": [],
+    "direction": "neutral",
+    "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1kR2NvRHh4c21ndkx1SEptUnhYR0YweGFkd3M3WVN3aWU1dGlRZ2lRb3h5ckttZEZJN1RqMU5UUGJFbFZuSkFYUVEybVBZUVZ1UnBQY19kMmppT2p3?oc=5",
+    "title": "Mission Debuts 778S Music Streamer with Qobuz, TIDAL, Spotify Connect & AirPlay 2 - eCoustics",
+    "text": "<a href=\"https://news.google.com/rss/articles/CBMiXEFVX3lxTE1kR2NvRHh4c21ndkx1SEptUnhYR0YweGFkd3M3WVN3aWU1dGlRZ2lRb3h5ckttZEZJN1RqMU5UUGJFbFZuSkFYUVEybVBZUVZ1UnBQY19kMmppT2p3?oc=5\" target=\"_blank\">Mission Debuts 778S Music Streamer with Qobuz, TIDAL, Spotify Connect & AirPlay 2</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">eCoustics</font>",
+    "author": "eCoustics",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2026-01-17T08:00:00+00:00",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-22T15:29:43.115530+00:00",
+    "bot_score": 0.0,
+    "bot_signals": []
+  },
+  {
     "id": "reddit_comment_n79yc55",
     "source": "reddit",
     "type": "comment",

@@ -1732,6 +1732,29 @@
     "bot_signals": []
   },
   {
+    "id": "news_6ad12a02f83d",
+    "source": "news",
+    "type": "article",
+    "platform_from": "generic",
+    "narratives": [
+      "quality"
+    ],
+    "direction": "neutral",
+    "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxObDFPb1l6OUZJenRicVlaYjBfSjhxWDdOTEFXa0ZIZk1wTG1QMmhCcWc3UWxUYmdGdllXWk5GSGdINlF6bmRmUzNKdjJtOElCcEcyTjc3aGxjLXNLeEJ5YVBWX21CYnJScW5NNmhBVlk5cnRZSHpCa0FCYThUQ2hsOVBlaDVyOHp5cXFzLWdtY0V0VVpYY09mZ3BHcU5WcVI3YUhPd0lDLW1pLWQ5dUFwZ184bXdVcllmYTNWekkzQTNxbnMwNVpzemdYM3owVUtCZmxlanM4S2FPZw?oc=5",
+    "title": "Has Qobuz's latest CarPlay upgrade made it the perfect hi-res streaming service for your car? - What Hi-Fi?",
+    "text": "<a href=\"https://news.google.com/rss/articles/CBMi2gFBVV95cUxObDFPb1l6OUZJenRicVlaYjBfSjhxWDdOTEFXa0ZIZk1wTG1QMmhCcWc3UWxUYmdGdllXWk5GSGdINlF6bmRmUzNKdjJtOElCcEcyTjc3aGxjLXNLeEJ5YVBWX21CYnJScW5NNmhBVlk5cnRZSHpCa0FCYThUQ2hsOVBlaDVyOHp5cXFzLWdtY0V0VVpYY09mZ3BHcU5WcVI3YUhPd0lDLW1pLWQ5dUFwZ184bXdVcllmYTNWekkzQTNxbnMwNVpzemdYM3owVUtCZmxlanM4S2FPZw?oc=5\" target=\"_blank\">Has Qobuz's latest CarPlay upgrade made it the perfect hi-res streaming service for your car?</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">What Hi-Fi?</font>",
+    "author": "What Hi-Fi?",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2026-02-13T09:00:00+00:00",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-22T15:29:43.115530+00:00",
+    "bot_score": 0.0,
+    "bot_signals": []
+  },
+  {
     "id": "reddit_1r3htdy",
     "source": "reddit",
     "type": "post",
