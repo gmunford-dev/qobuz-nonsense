@@ -4178,27 +4178,5 @@
     "bot_score": 0.0,
     "bot_signals": [],
     "campaign_burst": false
-  },
-  {
-    "id": "reddit_1qkpcuh",
-    "source": "reddit",
-    "type": "post",
-    "platform_from": "tidal",
-    "narratives": [],
-    "direction": "neutral",
-    "url": "https://reddit.com/r/audiophile/comments/1qkpcuh/opinions_on_streaming_dacs/",
-    "title": "Opinions on Streaming DACs",
-    "text": "I’m starting to consider new DACs and streamers so I wanted to share my current thinking and discuss how others have approached their journey deeper into the streaming world for their 2 channel systems. \n\nI am currently using a Cambridge CXN v2 into a Norma 140 and Rosso Fiorentino Volterras. The CXN has been a reliable piece for close to 8 years, minus the lack of Qobuz Connect (currently run through Google Cast). My main use case is running via Tidal/Qobuz Connect or decoding my CXC cd transport. I really have no plans to get more complicated than that as vinyl is my primary source in the sy",
-    "author": "reddsbywillie",
-    "author_age_days": null,
-    "author_karma": null,
-    "subreddit": "r/audiophile",
-    "date": "2026-01-23T12:21:33+00:00",
-    "score": 3,
-    "num_comments": 92,
-    "discovered": "2026-02-22T00:37:18.713397+00:00",
-    "bot_score": 0.0,
-    "bot_signals": [],
-    "campaign_burst": false
   }
 ]
