@@ -155,6 +155,29 @@
     "bot_signals": []
   },
   {
+    "id": "news_af57e16c4112",
+    "source": "news",
+    "type": "article",
+    "platform_from": "generic",
+    "narratives": [
+      "quality"
+    ],
+    "direction": "neutral",
+    "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5VZVFwU0l1ZXo0Z3lGUGRrWGY2TDdtOExZMWNlMGVwSGpRMER4Uzg4cEhtcUZqNWlhRWk5aHgwMlFKR01zQks2cFp2LVFLMVlLd0ROQm1Nc0RQZDNGcHlF?oc=5",
+    "title": "Qobuz Connect Comes to HEOS: Denon and Marantz Users Get a Real Hi-Res Streaming Option - eCoustics",
+    "text": "<a href=\"https://news.google.com/rss/articles/CBMiX0FVX3lxTE5VZVFwU0l1ZXo0Z3lGUGRrWGY2TDdtOExZMWNlMGVwSGpRMER4Uzg4cEhtcUZqNWlhRWk5aHgwMlFKR01zQks2cFp2LVFLMVlLd0ROQm1Nc0RQZDNGcHlF?oc=5\" target=\"_blank\">Qobuz Connect Comes to HEOS: Denon and Marantz Users Get a Real Hi-Res Streaming Option</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">eCoustics</font>",
+    "author": "eCoustics",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2025-05-15T07:00:00+00:00",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-22T02:33:14.691377+00:00",
+    "bot_score": 0.0,
+    "bot_signals": []
+  },
+  {
     "id": "news_33bce644cf37",
     "source": "news",
     "type": "article",

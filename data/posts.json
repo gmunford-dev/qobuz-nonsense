@@ -4226,27 +4226,5 @@
       "odd_hour_post"
     ],
     "campaign_burst": false
-  },
-  {
-    "id": "reddit_1qkdk69",
-    "source": "reddit",
-    "type": "post",
-    "platform_from": "tidal",
-    "narratives": [],
-    "direction": "neutral",
-    "url": "https://reddit.com/r/audiofiliabrasil/comments/1qkdk69/dúvida_de_iniciante/",
-    "title": "Dúvida de iniciante 🤔❓",
-    "text": "Boa noite, pessoal! Tô querendo começar nesse mundo da música de melhor qualidade, mas não manjo ABSOLUTAMENTE NADA da cena ainda! 😅\n\nAndei pesquisando alguns aparelhos mais baratos, mas tive dificuldade de encontrar comparativos entre eles. Desses aparelhos das imagens, qual vcs me recomendaram pra começar e ficar por um bom tempo (porque a grana não brota da torneira 🥲)? Queria um que pudesse usar também com streaming (Tidal ou Qobuz, ainda não decidi)...\n\nObrigado pela paciência e ajuda! 😊👍🏾",
-    "author": "MinVictor",
-    "author_age_days": null,
-    "author_karma": null,
-    "subreddit": "r/audiofiliabrasil",
-    "date": "2026-01-23T01:47:37+00:00",
-    "score": 11,
-    "num_comments": 12,
-    "discovered": "2026-02-22T00:37:18.713397+00:00",
-    "bot_score": 0.0,
-    "bot_signals": [],
-    "campaign_burst": false
   }
 ]

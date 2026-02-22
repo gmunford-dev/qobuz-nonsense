@@ -265,5 +265,26 @@
     "discovered": "2026-02-22T00:38:15.129626+00:00",
     "bot_score": 0.0,
     "bot_signals": []
+  },
+  {
+    "id": "news_45c1586ef01a",
+    "source": "news",
+    "type": "article",
+    "platform_from": "generic",
+    "narratives": [],
+    "direction": "neutral",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPdlZfakRScHBPWngzMndyLTRUeUcydXNkNnhGYURvVnVmUTZ2RU9FbnRqTjdSOF9veWpZS3lxTDFHLWtaazFPYUhILW1URmtway1aVjhjNmNsV2VONVZaVDBDZFMyeW9hbHJVdWxQUWpydWtQWmw1am41b2FMX1lFci1nWkhOWGRvM2loQlVoSzJjQQ?oc=5",
+    "title": "Qobuz Releases Its Per-Stream Royalty Rate, a First for a Streaming Platform - Billboard",
+    "text": "<a href=\"https://news.google.com/rss/articles/CBMikgFBVV95cUxPdlZfakRScHBPWngzMndyLTRUeUcydXNkNnhGYURvVnVmUTZ2RU9FbnRqTjdSOF9veWpZS3lxTDFHLWtaazFPYUhILW1URmtway1aVjhjNmNsV2VONVZaVDBDZFMyeW9hbHJVdWxQUWpydWtQWmw1am41b2FMX1lFci1nWkhOWGRvM2loQlVoSzJjQQ?oc=5\" target=\"_blank\">Qobuz Releases Its Per-Stream Royalty Rate, a First for a Streaming Platform</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Billboard</font>",
+    "author": "Billboard",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2025-03-20T07:00:00+00:00",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-22T02:33:14.691377+00:00",
+    "bot_score": 0.0,
+    "bot_signals": []
   }
 ]

@@ -21,6 +21,27 @@
     "bot_signals": []
   },
   {
+    "id": "news_1523c2af281c",
+    "source": "news",
+    "type": "article",
+    "platform_from": "generic",
+    "narratives": [],
+    "direction": "neutral",
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQR0pHY1RoRkprSXRKX3hkanNBU0REb2lMQ2tpWkVDWkVVYnFNaFN6NFZhZUhmcUpXM1Flb19iUms0ZEEyUXNhNWZHUmlxSm56R3lWUW5CRUVDYUotTHVjN3I0NnpneTNXaTkyanc2aHRZLUctWXpYNklPdVE2ZWNxdUw4dGdtUERQdG4tdXl3T25CQk8xZW5fRHN0Yy1HMTJJWE1halFURQ?oc=5",
+    "title": "10 Young Classical Artists to Watch in 2025 - Qobuz",
+    "text": "<a href=\"https://news.google.com/rss/articles/CBMipwFBVV95cUxQR0pHY1RoRkprSXRKX3hkanNBU0REb2lMQ2tpWkVDWkVVYnFNaFN6NFZhZUhmcUpXM1Flb19iUms0ZEEyUXNhNWZHUmlxSm56R3lWUW5CRUVDYUotTHVjN3I0NnpneTNXaTkyanc2aHRZLUctWXpYNklPdVE2ZWNxdUw4dGdtUERQdG4tdXl3T25CQk8xZW5fRHN0Yy1HMTJJWE1halFURQ?oc=5\" target=\"_blank\">10 Young Classical Artists to Watch in 2025</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Qobuz</font>",
+    "author": "Qobuz",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2025-04-16T07:00:00+00:00",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-22T02:33:14.691377+00:00",
+    "bot_score": 0.0,
+    "bot_signals": []
+  },
+  {
     "id": "news_3da7b99a137c",
     "source": "news",
     "type": "article",
