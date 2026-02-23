@@ -599,6 +599,152 @@
   .author-post-mini a:hover { text-decoration: underline; }
   .author-post-mini .post-date { color: var(--muted); font-size: 11px; margin-top: 4px; }
 
+  /* ── Drill-down modal ── */
+  .drilldown-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 300;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .drilldown-overlay.open { display: block; opacity: 1; }
+  .drilldown-modal {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.96);
+    width: min(780px, 92vw);
+    max-height: 85vh;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    z-index: 301;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  }
+  .drilldown-modal.open {
+    display: flex;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .drilldown-header {
+    padding: 20px 24px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .drilldown-title {
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .drilldown-title .dd-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .drilldown-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .drilldown-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .drilldown-close:hover { color: var(--text); background: var(--surface2); }
+  .drilldown-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .dd-stat {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .dd-stat-val { font-size: 17px; font-weight: 700; color: var(--accent); line-height: 1.2; }
+  .dd-stat-key { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .drilldown-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px 24px;
+  }
+  .drilldown-body .post-card { margin-bottom: 10px; }
+  .drilldown-body .month-header { margin-top: 10px; }
+  .drilldown-empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 48px 20px;
+    font-size: 14px;
+  }
+  .drilldown-load-more {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text2);
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .drilldown-load-more:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Active filter tag in results bar ── */
+  .active-filter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--accent);
+    margin-left: 10px;
+  }
+  .active-filter-tag .aft-clear {
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1;
+    margin-left: 2px;
+  }
+  .active-filter-tag .aft-clear:hover { color: var(--danger); }
+
+  /* ── Clickable pills & badges ── */
+  .narrative-pill[data-narrative] { cursor: pointer; transition: filter 0.15s; }
+  .narrative-pill[data-narrative]:hover { filter: brightness(1.3); }
+  .source-badge[data-source] { cursor: pointer; transition: filter 0.15s; }
+  .source-badge[data-source]:hover { filter: brightness(1.3); }
+
+  @media (max-width: 600px) {
+    .drilldown-stats { grid-template-columns: repeat(2, 1fr); }
+    .drilldown-modal { width: 96vw; max-height: 90vh; }
+  }
+
   /* ── CSV export button ── */
   .csv-export-btn {
     background: transparent;
@@ -1089,6 +1235,7 @@
     <div class="results-bar">
       <div class="results-count">
         Showing <strong id="visible-count">—</strong> of <strong id="total-count">—</strong> posts
+        <span id="active-filter-tags"></span>
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <button class="csv-export-btn" onclick="exportCSV()">⬇ Export CSV</button>
@@ -1190,6 +1337,9 @@ async function init() {
     archiveSelect.appendChild(opt);
   });
 
+  // Destroy existing charts before rebuilding (prevents Chart.js "canvas in use" error)
+  Chart.helpers?.each(Chart.instances, c => c.destroy());
+
   // Build trends chart + sentiment chart
   buildChart();
   buildSentimentChart();
@@ -1232,15 +1382,34 @@ async function init() {
     applyFilters();
   });
 
-  // Author panel click delegation
+  // Click delegation on post cards (author panel, narrative drilldown, source drilldown)
   document.getElementById('posts-list').addEventListener('click', e => {
     const link = e.target.closest('.author-link');
-    if (link) openAuthorPanel(link.dataset.author);
+    if (link) { openAuthorPanel(link.dataset.author); return; }
+    const pill = e.target.closest('.narrative-pill[data-narrative]');
+    if (pill) { e.preventDefault(); openDrilldown('narrative', pill.dataset.narrative); return; }
+    const badge = e.target.closest('.source-badge[data-source]');
+    if (badge) { e.preventDefault(); openDrilldown('source', badge.dataset.source); return; }
+  });
+  // Same delegation inside drill-down modal body
+  document.getElementById('drilldown-body').addEventListener('click', e => {
+    const link = e.target.closest('.author-link');
+    if (link) { openAuthorPanel(link.dataset.author); return; }
+    const pill = e.target.closest('.narrative-pill[data-narrative]');
+    if (pill) { e.preventDefault(); openDrilldown('narrative', pill.dataset.narrative); return; }
+    const badge = e.target.closest('.source-badge[data-source]');
+    if (badge) { e.preventDefault(); openDrilldown('source', badge.dataset.source); return; }
   });
 
-  // ESC closes author panel
+  // ESC closes panels (drilldown takes priority)
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeAuthorPanel();
+    if (e.key === 'Escape') {
+      if (document.getElementById('drilldown-modal').classList.contains('open')) {
+        closeDrilldown();
+      } else {
+        closeAuthorPanel();
+      }
+    }
   });
 
   document.getElementById('archive-select').addEventListener('change', async e => {
@@ -1258,11 +1427,17 @@ async function init() {
     chip.addEventListener('click', () => {
       const filterType = chip.dataset.filter;
       const value = chip.dataset.value;
+      const filterKey = filterType === 'source' ? 'source' : filterType === 'platform' ? 'platform' : filterType === 'direction' ? 'direction' : filterType === 'language' ? 'language' : 'narrative';
 
       document.querySelectorAll(`.filter-chip[data-filter="${filterType}"]`).forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      activeFilters[filterType === 'source' ? 'source' : filterType === 'platform' ? 'platform' : filterType === 'direction' ? 'direction' : filterType === 'language' ? 'language' : 'narrative'] = value;
+      activeFilters[filterKey] = value;
       applyFilters();
+
+      // Open drill-down modal for non-"all" selections
+      if (value !== 'all') {
+        openDrilldown(filterKey, value);
+      }
     });
   });
 
@@ -1328,7 +1503,41 @@ function applyFilters() {
   displayedCount = 0;
 
   document.getElementById('total-count').textContent = posts.length.toLocaleString();
+  updateActiveFilterTags();
   renderPosts();
+}
+
+function updateActiveFilterTags() {
+  const container = document.getElementById('active-filter-tags');
+  if (!container) return;
+  const tags = [];
+  const labelMap = {
+    source: v => ({ reddit: 'Reddit', news: 'News', hackernews: 'Hacker News', twitter: 'X/Twitter' }[v] || v),
+    direction: v => ({ pro: 'Pro-Qobuz', critical: 'Critical', neutral: 'Neutral' }[v] || v),
+    language: v => LANG_NAMES[v] || v,
+    platform: v => platformName(v),
+    narrative: v => narrativeName(v),
+  };
+  ['source', 'direction', 'language', 'platform', 'narrative'].forEach(key => {
+    if (activeFilters[key] && activeFilters[key] !== 'all') {
+      const label = (labelMap[key] || (v => v))(activeFilters[key]);
+      tags.push(`<span class="active-filter-tag">${escHtml(label)}<span class="aft-clear" data-filter-key="${key}" title="Clear filter">✕</span></span>`);
+    }
+  });
+  container.innerHTML = tags.join('');
+  // Attach clear handlers
+  container.querySelectorAll('.aft-clear').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const key = btn.dataset.filterKey;
+      activeFilters[key] = 'all';
+      const filterType = key === 'platform' ? 'platform' : key;
+      document.querySelectorAll(`.filter-chip[data-filter="${filterType}"]`).forEach(c => c.classList.remove('active'));
+      const allChip = document.querySelector(`.filter-chip[data-filter="${filterType}"][data-value="all"]`);
+      if (allChip) allChip.classList.add('active');
+      applyFilters();
+    });
+  });
 }
 
 // ── Rendering ─────────────────────────────────────────────────────────────────
@@ -1387,7 +1596,7 @@ function buildCard(post) {
   const botLabel = botScore >= 0.6 ? '🤖 Bot suspect' : botScore >= 0.35 ? '⚠ Possible bot' : '✓ Likely human';
 
   const narrativePills = (post.narratives || []).map(n =>
-    `<span class="narrative-pill pill-${n}">${narrativeName(n)}</span>`
+    `<span class="narrative-pill pill-${n}" data-narrative="${n}">${narrativeName(n)}</span>`
   ).join('');
 
   const platformBadge = post.platform_from && post.platform_from !== 'generic'
@@ -1429,7 +1638,7 @@ function buildCard(post) {
 
   card.innerHTML = `
     <div class="card-header">
-      <span class="source-badge source-${post.source}">${post.source}</span>${langBadge}
+      <span class="source-badge source-${post.source}" data-source="${post.source}">${post.source}</span>${langBadge}
       <div class="card-title">
         <a href="${escHtml(post.url)}" target="_blank" rel="noopener">${escHtml(post.title || post.text?.substring(0,120) || '(no title)')}</a>
       </div>
@@ -1926,6 +2135,144 @@ function buildLanguageChart() {
   });
 }
 
+// ── Drill-down modal ──────────────────────────────────────────────────────────
+const DD_PAGE = 50;
+let ddPosts = [];
+let ddShown = 0;
+
+const DD_COLORS = {
+  source: { reddit: '#ff4500', news: '#4a9eff', hackernews: '#ff6600', twitter: '#1d9bf0' },
+  direction: { pro: '#c2ffa0', critical: '#ffaa44', neutral: '#6b6b88' },
+  language: { en: '#4a9eff', fr: '#0055a4', de: '#dd0000', es: '#ffc400', pt: '#006600', it: '#009246', nl: '#ff6600', unknown: '#6b6b88' },
+  platform: { spotify: '#1db954', amazon: '#ff9900', apple: '#fc3c44', youtube: '#ff0000', tidal: '#00ffff', deezer: '#a238ff', generic: '#6b6b88' },
+  narrative: { 'royalties': '#ff6b9d', 'quality': '#c27aff', 'anti-ceo': '#ff5e5e', 'boycott-israel': '#ff4444',
+    'degoogle': '#5effa8', 'anti-spotify': '#ff8844', 'pro-indie': '#7ac2ff', 'switch-recommendation': '#ffd700',
+    'app-issues': '#ff6b6b', 'catalog-gaps': '#ffb347', 'service-issues': '#ff7777', 'pricing-complaints': '#ff9944' },
+};
+
+function getDrilldownLabel(filterType, value) {
+  if (filterType === 'source') return { label: { reddit: 'Reddit', news: 'News', hackernews: 'Hacker News', twitter: 'X / Twitter' }[value] || value, icon: '🔍' };
+  if (filterType === 'direction') return { label: { pro: 'Pro-Qobuz', critical: 'Critical', neutral: 'Neutral' }[value] || value, icon: '📊' };
+  if (filterType === 'language') return { label: (LANG_NAMES[value] || value) + ' Posts', icon: { en: '🇬🇧', fr: '🇫🇷', de: '🇩🇪', es: '🇪🇸', pt: '🇧🇷', it: '🇮🇹', nl: '🇳🇱' }[value] || '🌐' };
+  if (filterType === 'platform') return { label: '← ' + platformName(value), icon: '🔀' };
+  if (filterType === 'narrative') return { label: narrativeName(value), icon: '💬' };
+  return { label: value, icon: '🔍' };
+}
+
+function filterPostsForDrilldown(filterType, value) {
+  return allPosts.filter(p => {
+    if (filterType === 'source') return p.source === value;
+    if (filterType === 'direction') return (p.direction || 'neutral') === value;
+    if (filterType === 'language') return (p.language || 'en') === value;
+    if (filterType === 'platform') return p.platform_from === value;
+    if (filterType === 'narrative') return (p.narratives || []).includes(value);
+    return false;
+  }).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+}
+
+function buildDrilldownStats(posts) {
+  if (!posts.length) return '';
+  const critical = posts.filter(p => p.direction === 'critical').length;
+  const pro = posts.filter(p => p.direction === 'pro').length;
+  const critPct = Math.round((critical / posts.length) * 100);
+  const proPct = Math.round((pro / posts.length) * 100);
+
+  const narCounts = {};
+  posts.forEach(p => (p.narratives || []).forEach(n => { narCounts[n] = (narCounts[n] || 0) + 1; }));
+  const topNar = Object.entries(narCounts).sort((a, b) => b[1] - a[1])[0];
+
+  const engagements = posts.map(p => (p.score || 0) + (p.num_comments || 0) * 2);
+  const avgEng = Math.round(engagements.reduce((a, b) => a + b, 0) / posts.length);
+
+  const dates = posts.map(p => p.date || '').filter(Boolean).sort();
+  const oldest = dates[0] ? formatMonth(dates[0].substring(0, 7)) : '—';
+  const newest = dates[dates.length - 1] ? formatMonth(dates[dates.length - 1].substring(0, 7)) : '—';
+  const timeSpan = oldest === newest ? newest : `${oldest} – ${newest}`;
+
+  return `
+    <div class="dd-stat">
+      <div class="dd-stat-val" style="color:#ffaa44">${critPct}%</div>
+      <div class="dd-stat-key">Critical · ${proPct}% Pro</div>
+    </div>
+    <div class="dd-stat">
+      <div class="dd-stat-val">${topNar ? narrativeName(topNar[0]) : '—'}</div>
+      <div class="dd-stat-key">Top narrative${topNar ? ' (' + topNar[1] + ')' : ''}</div>
+    </div>
+    <div class="dd-stat">
+      <div class="dd-stat-val">${avgEng.toLocaleString()}</div>
+      <div class="dd-stat-key">Avg engagement</div>
+    </div>
+    <div class="dd-stat">
+      <div class="dd-stat-val" style="font-size:14px">${timeSpan}</div>
+      <div class="dd-stat-key">Time span</div>
+    </div>`;
+}
+
+function renderDrilldownCards() {
+  const body = document.getElementById('drilldown-body');
+  const batch = ddPosts.slice(ddShown, ddShown + DD_PAGE);
+  ddShown += batch.length;
+
+  let lastMonth = null;
+  batch.forEach(post => {
+    const postMonth = (post.date || '').substring(0, 7);
+    if (postMonth !== lastMonth) {
+      const divider = document.createElement('div');
+      divider.className = 'month-header';
+      divider.innerHTML = `<div class="month-label">${formatMonth(postMonth)}</div><div class="month-line"></div>`;
+      body.appendChild(divider);
+      lastMonth = postMonth;
+    }
+    body.appendChild(buildCard(post));
+  });
+
+  // Remove old load-more button if present
+  const oldBtn = body.querySelector('.drilldown-load-more');
+  if (oldBtn) oldBtn.remove();
+
+  if (ddShown < ddPosts.length) {
+    const btn = document.createElement('button');
+    btn.className = 'drilldown-load-more';
+    btn.textContent = `Show more (${ddPosts.length - ddShown} remaining)`;
+    btn.onclick = () => renderDrilldownCards();
+    body.appendChild(btn);
+  }
+}
+
+function openDrilldown(filterType, value) {
+  const { label, icon } = getDrilldownLabel(filterType, value);
+  const color = (DD_COLORS[filterType] || {})[value] || 'var(--accent)';
+
+  ddPosts = filterPostsForDrilldown(filterType, value);
+  ddShown = 0;
+
+  document.getElementById('drilldown-title').innerHTML =
+    `<span class="dd-dot" style="background:${color}"></span>${icon} ${escHtml(label)}`;
+  document.getElementById('drilldown-subtitle').textContent =
+    `${ddPosts.length} post${ddPosts.length !== 1 ? 's' : ''} in dataset`;
+  document.getElementById('drilldown-stats').innerHTML = buildDrilldownStats(ddPosts);
+
+  const body = document.getElementById('drilldown-body');
+  body.innerHTML = '';
+  body.scrollTop = 0;
+
+  if (ddPosts.length === 0) {
+    body.innerHTML = '<div class="drilldown-empty">No posts match this filter.</div>';
+  } else {
+    renderDrilldownCards();
+  }
+
+  document.getElementById('drilldown-overlay').classList.add('open');
+  document.getElementById('drilldown-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrilldown() {
+  document.getElementById('drilldown-overlay').classList.remove('open');
+  document.getElementById('drilldown-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────────
 init();
 </script>
@@ -1938,6 +2285,20 @@ init();
     <button class="author-panel-close" onclick="closeAuthorPanel()">✕</button>
   </div>
   <div class="author-panel-body" id="author-panel-body"></div>
+</div>
+
+<!-- Drill-down modal -->
+<div class="drilldown-overlay" id="drilldown-overlay" onclick="closeDrilldown()"></div>
+<div class="drilldown-modal" id="drilldown-modal">
+  <div class="drilldown-header">
+    <div>
+      <div class="drilldown-title" id="drilldown-title"></div>
+      <div class="drilldown-subtitle" id="drilldown-subtitle"></div>
+    </div>
+    <button class="drilldown-close" onclick="closeDrilldown()">✕</button>
+  </div>
+  <div class="drilldown-stats" id="drilldown-stats"></div>
+  <div class="drilldown-body" id="drilldown-body"></div>
 </div>
 
 </body>
