@@ -171,6 +171,7 @@
   .dot-reddit { background: #ff5700; }
   .dot-news { background: #4a9eff; }
   .dot-twitter { background: #1da1f2; }
+  .dot-hackernews { background: #ff6600; }
 
   /* Platform colors */
   .dot-spotify { background: #1ed760; }
@@ -178,7 +179,17 @@
   .dot-apple { background: #a0a0a0; }
   .dot-youtube { background: #ff0000; }
   .dot-tidal { background: #00ffff; }
+  .dot-deezer { background: #a238ff; }
   .dot-generic { background: #6b6b88; }
+
+  /* Language colors */
+  .dot-lang-en { background: #4a9eff; }
+  .dot-lang-fr { background: #0055a4; }
+  .dot-lang-de { background: #dd0000; }
+  .dot-lang-es { background: #ffc400; }
+  .dot-lang-pt { background: #006600; }
+  .dot-lang-it { background: #009246; }
+  .dot-lang-nl { background: #ff6600; }
 
   .search-input {
     width: 100%;
@@ -669,6 +680,37 @@
   .velocity-up { background: rgba(94,255,168,0.15); color: var(--ok); }
   .velocity-down { background: rgba(255,94,94,0.15); color: var(--danger); }
   .velocity-flat { background: rgba(107,107,136,0.15); color: var(--muted); }
+
+  /* ── Language badge ── */
+  .lang-badge {
+    flex-shrink: 0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-left: 4px;
+  }
+  .lang-fr { background: rgba(0,85,164,0.2); color: #5599dd; }
+  .lang-de { background: rgba(221,0,0,0.2); color: #ee6666; }
+  .lang-es { background: rgba(255,196,0,0.2); color: #ffcc44; }
+  .lang-pt { background: rgba(0,102,0,0.2); color: #44aa44; }
+  .lang-it { background: rgba(0,146,70,0.2); color: #44bb66; }
+  .lang-nl { background: rgba(255,102,0,0.2); color: #ff8844; }
+  .lang-unknown { background: rgba(107,107,136,0.2); color: var(--muted); }
+
+  .translated-indicator {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 2px;
+  }
+
+  /* ── Hacker News source badge ── */
+  .source-hackernews { background: rgba(255,102,0,0.2); color: #ff8833; }
+
+  /* ── Deezer platform ── */
+  .platform-deezer { background: rgba(162,56,255,0.15); color: #a238ff; }
 </style>
 </head>
 <body>
@@ -709,6 +751,11 @@
       <div class="stat-value" id="stat-top-narrative" style="color: var(--accent2); font-size:14px">—</div>
       <div class="stat-label">Top Narrative</div>
     </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-value" id="stat-languages" style="color: var(--accent2)">—</div>
+      <div class="stat-label">Languages</div>
+    </div>
   </div>
 </header>
 
@@ -742,6 +789,12 @@
           <span class="chip-dot dot-news"></span>
           News
           <span class="chip-count" id="count-source-news">0</span>
+        </label>
+        <label class="filter-chip" data-filter="source" data-value="hackernews">
+          <input type="checkbox">
+          <span class="chip-dot dot-hackernews"></span>
+          Hacker News
+          <span class="chip-count" id="count-source-hackernews">0</span>
         </label>
         <label class="filter-chip" data-filter="source" data-value="twitter">
           <input type="checkbox">
@@ -783,6 +836,55 @@
       </div>
     </div>
 
+    <!-- Language filter -->
+    <div class="filter-section">
+      <h3>Language</h3>
+      <div class="filter-group" id="filter-language">
+        <label class="filter-chip active" data-filter="language" data-value="all">
+          <input type="checkbox" checked>
+          <span class="chip-dot" style="background: var(--muted)"></span>
+          All Languages
+          <span class="chip-count" id="count-lang-all">--</span>
+        </label>
+        <label class="filter-chip" data-filter="language" data-value="en">
+          <input type="checkbox">
+          <span class="chip-dot dot-lang-en"></span>
+          English
+          <span class="chip-count" id="count-lang-en">0</span>
+        </label>
+        <label class="filter-chip" data-filter="language" data-value="fr">
+          <input type="checkbox">
+          <span class="chip-dot dot-lang-fr"></span>
+          Francais
+          <span class="chip-count" id="count-lang-fr">0</span>
+        </label>
+        <label class="filter-chip" data-filter="language" data-value="de">
+          <input type="checkbox">
+          <span class="chip-dot dot-lang-de"></span>
+          Deutsch
+          <span class="chip-count" id="count-lang-de">0</span>
+        </label>
+        <label class="filter-chip" data-filter="language" data-value="es">
+          <input type="checkbox">
+          <span class="chip-dot dot-lang-es"></span>
+          Espanol
+          <span class="chip-count" id="count-lang-es">0</span>
+        </label>
+        <label class="filter-chip" data-filter="language" data-value="pt">
+          <input type="checkbox">
+          <span class="chip-dot dot-lang-pt"></span>
+          Portugues
+          <span class="chip-count" id="count-lang-pt">0</span>
+        </label>
+        <label class="filter-chip" data-filter="language" data-value="it">
+          <input type="checkbox">
+          <span class="chip-dot dot-lang-it"></span>
+          Italiano
+          <span class="chip-count" id="count-lang-it">0</span>
+        </label>
+      </div>
+    </div>
+
     <!-- Platform filter -->
     <div class="filter-section">
       <h3>Switching From</h3>
@@ -816,6 +918,18 @@
           <span class="chip-dot dot-youtube"></span>
           YouTube Music
           <span class="chip-count" id="count-platform-youtube">0</span>
+        </label>
+        <label class="filter-chip" data-filter="platform" data-value="tidal">
+          <input type="checkbox">
+          <span class="chip-dot dot-tidal"></span>
+          Tidal
+          <span class="chip-count" id="count-platform-tidal">0</span>
+        </label>
+        <label class="filter-chip" data-filter="platform" data-value="deezer">
+          <input type="checkbox">
+          <span class="chip-dot dot-deezer"></span>
+          Deezer
+          <span class="chip-count" id="count-platform-deezer">0</span>
         </label>
         <label class="filter-chip" data-filter="platform" data-value="generic">
           <input type="checkbox">
@@ -955,6 +1069,22 @@
       </div>
     </div>
 
+    <!-- Source + Language breakdown -->
+    <div class="two-col">
+      <div class="chart-card">
+        <h2>By Source</h2>
+        <div class="chart-container" style="height:180px">
+          <canvas id="source-chart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h2>By Language</h2>
+        <div class="chart-container" style="height:180px">
+          <canvas id="language-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
     <!-- Results bar -->
     <div class="results-bar">
       <div class="results-count">
@@ -967,6 +1097,7 @@
           <option value="date-asc">Oldest First</option>
           <option value="score-desc">Highest Score</option>
           <option value="bot-desc">Highest Bot Score</option>
+          <option value="engagement-desc">Most Engagement</option>
         </select>
       </div>
     </div>
@@ -1001,6 +1132,10 @@ const SIGNAL_LABELS = {
   'numeric_username_suffix': 'Long number suffix in username',
 };
 
+// ── Language mappings ─────────────────────────────────────────────────────────
+const LANG_FLAGS = { en: 'EN', fr: 'FR', de: 'DE', es: 'ES', pt: 'PT', it: 'IT', nl: 'NL' };
+const LANG_NAMES = { en: 'English', fr: 'French', de: 'German', es: 'Spanish', pt: 'Portuguese', it: 'Italian', nl: 'Dutch', unknown: 'Unknown' };
+
 // ── State ─────────────────────────────────────────────────────────────────────
 let allPosts = [];
 let filteredPosts = [];
@@ -1012,6 +1147,7 @@ let activeFilters = {
   platform: 'all',
   narrative: 'all',
   direction: 'all',
+  language: 'all',
   botMin: 0,
   search: '',
   sort: 'date-desc',
@@ -1038,6 +1174,10 @@ async function init() {
   const criticalCount = (METADATA.by_direction || {}).critical || 0;
   document.getElementById('stat-critical').textContent = criticalCount.toLocaleString();
 
+  // Languages stat
+  const langCount = Object.keys(METADATA.by_language || {}).length;
+  document.getElementById('stat-languages').textContent = langCount;
+
   // Populate counts in sidebar
   updateSidebarCounts(allPosts);
 
@@ -1054,9 +1194,11 @@ async function init() {
   buildChart();
   buildSentimentChart();
 
-  // Top posts + subreddit breakdown
+  // Top posts + subreddit breakdown + source/language charts
   buildTopPostsPanel();
   buildSubredditTable();
+  buildSourceChart();
+  buildLanguageChart();
 
   // Velocity indicator
   displayVelocity();
@@ -1119,7 +1261,7 @@ async function init() {
 
       document.querySelectorAll(`.filter-chip[data-filter="${filterType}"]`).forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      activeFilters[filterType === 'source' ? 'source' : filterType === 'platform' ? 'platform' : filterType === 'direction' ? 'direction' : 'narrative'] = value;
+      activeFilters[filterType === 'source' ? 'source' : filterType === 'platform' ? 'platform' : filterType === 'direction' ? 'direction' : filterType === 'language' ? 'language' : 'narrative'] = value;
       applyFilters();
     });
   });
@@ -1155,6 +1297,9 @@ function applyFilters() {
   if (activeFilters.direction !== 'all') {
     posts = posts.filter(p => (p.direction || 'neutral') === activeFilters.direction);
   }
+  if (activeFilters.language !== 'all') {
+    posts = posts.filter(p => (p.language || 'en') === activeFilters.language);
+  }
   if (activeFilters.botMin > 0) {
     posts = posts.filter(p => (p.bot_score || 0) >= activeFilters.botMin);
   }
@@ -1163,6 +1308,8 @@ function applyFilters() {
     posts = posts.filter(p =>
       (p.title || '').toLowerCase().includes(q) ||
       (p.text || '').toLowerCase().includes(q) ||
+      (p.title_original || '').toLowerCase().includes(q) ||
+      (p.text_original || '').toLowerCase().includes(q) ||
       (p.author || '').toLowerCase().includes(q) ||
       (p.subreddit || '').toLowerCase().includes(q)
     );
@@ -1175,6 +1322,7 @@ function applyFilters() {
   else if (sort === 'date-asc') posts.sort((a,b) => (a.date||'').localeCompare(b.date||''));
   else if (sort === 'score-desc') posts.sort((a,b) => (b.score||0) - (a.score||0));
   else if (sort === 'bot-desc') posts.sort((a,b) => (b.bot_score||0) - (a.bot_score||0));
+  else if (sort === 'engagement-desc') posts.sort((a,b) => ((b.score||0) + (b.num_comments||0)*2) - ((a.score||0) + (a.num_comments||0)*2));
 
   filteredPosts = posts;
   displayedCount = 0;
@@ -1271,13 +1419,22 @@ function buildCard(post) {
       `</div>`
     : '';
 
+  const lang = post.language || 'en';
+  const langBadge = lang !== 'en'
+    ? `<span class="lang-badge lang-${lang}" title="Translated from ${LANG_NAMES[lang] || lang}">${(LANG_FLAGS[lang] || lang).toUpperCase()}</span>`
+    : '';
+  const translatedLine = post.title_original
+    ? `<div class="translated-indicator">Translated from ${LANG_NAMES[lang] || lang}</div>`
+    : '';
+
   card.innerHTML = `
     <div class="card-header">
-      <span class="source-badge source-${post.source}">${post.source}</span>
+      <span class="source-badge source-${post.source}">${post.source}</span>${langBadge}
       <div class="card-title">
         <a href="${escHtml(post.url)}" target="_blank" rel="noopener">${escHtml(post.title || post.text?.substring(0,120) || '(no title)')}</a>
       </div>
     </div>
+    ${translatedLine}
     <div class="card-meta">
       <span class="meta-author author-link" data-author="${escHtml(post.author || 'unknown')}" style="cursor:pointer; text-decoration:underline dotted; text-underline-offset:2px">@${escHtml(post.author || 'unknown')}</span>
       ${subredditLabel}
@@ -1306,7 +1463,7 @@ function updateSidebarCounts(posts) {
   const countEl = id => document.getElementById(id);
 
   // Source counts
-  ['reddit', 'news', 'twitter'].forEach(s => {
+  ['reddit', 'news', 'hackernews', 'twitter'].forEach(s => {
     const el = countEl(`count-source-${s}`);
     if (el) el.textContent = posts.filter(p => p.source === s).length;
   });
@@ -1314,10 +1471,18 @@ function updateSidebarCounts(posts) {
   if (allEl) allEl.textContent = posts.length;
 
   // Platform counts
-  ['spotify', 'amazon', 'apple', 'youtube', 'generic'].forEach(p => {
+  ['spotify', 'amazon', 'apple', 'youtube', 'tidal', 'deezer', 'generic'].forEach(p => {
     const el = countEl(`count-platform-${p}`);
     if (el) el.textContent = posts.filter(post => post.platform_from === p).length;
   });
+
+  // Language counts
+  ['en','fr','de','es','pt','it'].forEach(l => {
+    const el = countEl(`count-lang-${l}`);
+    if (el) el.textContent = posts.filter(p => (p.language || 'en') === l).length;
+  });
+  const langAllEl = countEl('count-lang-all');
+  if (langAllEl) langAllEl.textContent = posts.length;
 
   // Narrative counts
   ['royalties','quality','anti-ceo','boycott-israel','degoogle','anti-spotify','pro-indie','switch-recommendation',
@@ -1401,7 +1566,7 @@ function getLast6Months() {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function resetFilters() {
-  activeFilters = { source: 'all', platform: 'all', narrative: 'all', direction: 'all', botMin: 0, search: '', sort: 'date-desc' };
+  activeFilters = { source: 'all', platform: 'all', narrative: 'all', direction: 'all', language: 'all', botMin: 0, search: '', sort: 'date-desc' };
   document.getElementById('search-input').value = '';
   document.getElementById('bot-threshold').value = 0;
   document.getElementById('bot-threshold-value').textContent = '0%';
@@ -1552,7 +1717,7 @@ function closeAuthorPanel() {
 
 // ── CSV Export ─────────────────────────────────────────────────────────────────
 function exportCSV() {
-  const cols = ['date','source','type','author','subreddit','title','narratives','direction','platform_from','score','bot_score','bot_signals','campaign_burst','url'];
+  const cols = ['date','source','type','language','author','subreddit','title','title_original','text','text_original','narratives','direction','platform_from','score','num_comments','bot_score','bot_signals','campaign_burst','url'];
   const rows = [cols.join(',')];
   filteredPosts.forEach(p => {
     const vals = cols.map(c => {
@@ -1701,6 +1866,64 @@ function displayVelocity() {
     const arrow = pct > 0 ? '↑' : pct < 0 ? '↓' : '→';
     el.innerHTML = `<span class="velocity-badge ${cls}">${arrow}${Math.abs(pct)}%</span>`;
   }
+}
+
+// ── Source breakdown chart ─────────────────────────────────────────────────────
+function buildSourceChart() {
+  const bySource = METADATA.by_source || {};
+  const labels = Object.keys(bySource);
+  const data = Object.values(bySource);
+  if (!labels.length) return;
+  const colorMap = { reddit: '#ff5700', news: '#4a9eff', twitter: '#1da1f2', hackernews: '#ff6600' };
+
+  new Chart(document.getElementById('source-chart'), {
+    type: 'doughnut',
+    data: {
+      labels: labels.map(l => l === 'hackernews' ? 'Hacker News' : l.charAt(0).toUpperCase() + l.slice(1)),
+      datasets: [{
+        data: data,
+        backgroundColor: labels.map(l => (colorMap[l] || '#6b6b88') + '88'),
+        borderColor: labels.map(l => colorMap[l] || '#6b6b88'),
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { color: '#a0a0c0', font: { size: 11 }, boxWidth: 12 } },
+      },
+    },
+  });
+}
+
+// ── Language breakdown chart ───────────────────────────────────────────────────
+function buildLanguageChart() {
+  const byLang = METADATA.by_language || {};
+  const labels = Object.keys(byLang);
+  const data = Object.values(byLang);
+  if (!labels.length) return;
+  const colorMap = { en: '#4a9eff', fr: '#0055a4', de: '#dd0000', es: '#ffc400', pt: '#006600', it: '#009246', nl: '#ff6600', unknown: '#6b6b88' };
+
+  new Chart(document.getElementById('language-chart'), {
+    type: 'doughnut',
+    data: {
+      labels: labels.map(l => LANG_NAMES[l] || l),
+      datasets: [{
+        data: data,
+        backgroundColor: labels.map(l => (colorMap[l] || '#6b6b88') + '88'),
+        borderColor: labels.map(l => colorMap[l] || '#6b6b88'),
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { color: '#a0a0c0', font: { size: 11 }, boxWidth: 12 } },
+      },
+    },
+  });
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────

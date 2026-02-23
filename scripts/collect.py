@@ -25,6 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from tag_narratives import tag_narratives, detect_platform_from
 from bot_score import score_account
+from translate import translate_post
 
 # ─── Paths ────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).parent.parent
@@ -73,11 +74,40 @@ REDDIT_QUERIES = [
     "cancel Qobuz",
 ]
 
+# International Reddit queries (translated content gets English-tagged by pipeline)
+REDDIT_QUERIES_INTL = [
+    # French (Qobuz HQ is in Paris — highest priority)
+    "passer a Qobuz", "Qobuz meilleur que Spotify", "Qobuz avis",
+    "quitter Spotify Qobuz", "qualite audio Qobuz", "Qobuz abonnement",
+    "Qobuz probleme", "Qobuz application", "Qobuz catalogue",
+    # German
+    "zu Qobuz wechseln", "Qobuz besser als Spotify", "Qobuz Erfahrung",
+    "Hi-Res Streaming Qobuz", "Qobuz Abo", "Qobuz App Problem",
+    # Spanish
+    "cambiar a Qobuz", "Qobuz opiniones", "Qobuz mejor que Spotify",
+    # Portuguese
+    "Qobuz Brasil", "streaming qualidade Qobuz",
+    # Italian
+    "passare a Qobuz", "Qobuz opinioni",
+]
+
 REDDIT_SUBREDDITS = [
     "Music", "audiophile", "hifi", "BoycottIsrael", "degoogle",
     "TIdaL", "fantanoforever", "audiofiliabrasil", "spotify",
     "headphones", "vinyl", "letstalkmusic", "indieheads",
     "qobuz",  # official Qobuz community — prime source for complaints
+]
+
+# International subreddits (search for "Qobuz" within each)
+REDDIT_SUBREDDITS_INTL = [
+    # French
+    "france", "musique", "audiophilefrancais",
+    # German
+    "de_EDV", "Musik",
+    # Spanish / Portuguese
+    "spain", "musica",
+    # Italian / Dutch
+    "italy", "thenetherlands",
 ]
 
 # ─── News search config ───────────────────────────────────────────────────────
@@ -92,6 +122,24 @@ NEWS_QUERIES = [
     "Qobuz complaints users",
 ]
 
+# International Google News queries with locale params: (query, lang, country)
+NEWS_QUERIES_INTL = [
+    # French
+    ("Qobuz streaming", "fr", "FR"),
+    ("Qobuz Spotify", "fr", "FR"),
+    ("Qobuz avis test", "fr", "FR"),
+    ("Qobuz qualite audio", "fr", "FR"),
+    # German
+    ("Qobuz Streaming Test", "de", "DE"),
+    ("Qobuz Spotify Vergleich", "de", "DE"),
+    # Spanish
+    ("Qobuz streaming opinion", "es", "ES"),
+    # Italian
+    ("Qobuz streaming recensione", "it", "IT"),
+    # Portuguese (Brazil)
+    ("Qobuz streaming Brasil", "pt-BR", "BR"),
+]
+
 # Direct RSS feeds from music industry trades — no API key needed
 DIRECT_RSS_FEEDS = [
     ("Music Business Worldwide", "https://www.musicbusinessworldwide.com/feed/"),
@@ -100,6 +148,13 @@ DIRECT_RSS_FEEDS = [
     ("What Hi-Fi", "https://www.whathifi.com/rss"),
     ("Stereophile", "https://www.stereophile.com/rss.xml"),
     # Hifi News removed — returns HTTP 404
+]
+
+# International RSS feeds
+DIRECT_RSS_FEEDS_INTL = [
+    ("ON-Mag (FR)", "https://www.on-mag.fr/index.php/toute-l-actualite?format=feed&type=rss"),
+    ("Les Numeriques (FR)", "https://www.lesnumeriques.com/rss.xml"),
+    ("ComputerBild (DE)", "https://www.computerbild.de/rss"),
 ]
 
 # ─── Direction detection ──────────────────────────────────────────────────────
@@ -135,6 +190,23 @@ def detect_direction(text: str, narratives: list[str]) -> str:
     if is_pro:
         return "pro"
     return "neutral"
+
+
+def _finalize_post(post: dict) -> dict:
+    """Translate if non-English, then tag narratives, direction, and platform.
+
+    Must be called AFTER the post dict is populated with title/text but BEFORE
+    narrative tagging. Mutates post in place and returns it.
+    """
+    # 1. Detect language and translate if needed
+    translate_post(post)
+
+    # 2. Run English keyword analysis on (possibly translated) text
+    full_text = (post.get("title") or "") + " " + (post.get("text") or "")
+    post["narratives"] = tag_narratives(full_text)
+    post["direction"] = detect_direction(full_text, post["narratives"])
+    post["platform_from"] = detect_platform_from(full_text)
+    return post
 
 
 # ─── Utility ──────────────────────────────────────────────────────────────────
@@ -277,14 +349,13 @@ def collect_reddit(existing_ids: set) -> list[dict]:
             age_days = None
             karma = None
 
-        narratives = tag_narratives(full_text)
         post = {
             "id": pid,
             "source": "reddit",
             "type": "post",
-            "platform_from": detect_platform_from(full_text),
-            "narratives": narratives,
-            "direction": detect_direction(full_text, narratives),
+            "platform_from": "generic",
+            "narratives": [],
+            "direction": "neutral",
             "url": f"https://reddit.com{sub.permalink}",
             "title": sub.title[:300],
             "text": sub.selftext[:600] if sub.selftext else "",
@@ -299,7 +370,9 @@ def collect_reddit(existing_ids: set) -> list[dict]:
             "bot_score": 0.0,
             "bot_signals": [],
             "campaign_burst": False,
+            "language": "en",
         }
+        _finalize_post(post)
         posts.append(post)
 
     def process_comment(comment, subreddit_name):
@@ -339,16 +412,15 @@ def collect_reddit(existing_ids: set) -> list[dict]:
         except Exception:
             parent_url = f"https://reddit.com/r/{subreddit_name}"
 
-        comment_narratives = tag_narratives(body)
         post = {
             "id": pid,
             "source": "reddit",
             "type": "comment",
-            "platform_from": detect_platform_from(body),
-            "narratives": comment_narratives,
-            "direction": detect_direction(body, comment_narratives),
+            "platform_from": "generic",
+            "narratives": [],
+            "direction": "neutral",
             "url": parent_url + f"/_/{comment.id}",
-            "title": body[:120] + ("…" if len(body) > 120 else ""),
+            "title": body[:120] + ("..." if len(body) > 120 else ""),
             "text": body[:600],
             "author": author_name,
             "author_age_days": age_days,
@@ -361,7 +433,9 @@ def collect_reddit(existing_ids: set) -> list[dict]:
             "bot_score": 0.0,
             "bot_signals": [],
             "campaign_burst": False,
+            "language": "en",
         }
+        _finalize_post(post)
         posts.append(post)
 
     print("Collecting Reddit posts...")
@@ -400,109 +474,100 @@ def collect_reddit(existing_ids: set) -> list[dict]:
     except Exception as e:
         print(f"  Backfill error: {e}")
 
+    # 4. International queries
+    print("  International queries...")
+    for query in REDDIT_QUERIES_INTL:
+        try:
+            for sub in reddit.subreddit("all").search(
+                query, sort="new", time_filter="month", limit=15
+            ):
+                process_submission(sub)
+        except Exception as e:
+            print(f"  Intl search error for '{query}': {e}")
+
+    # 5. International subreddits
+    print("  International subreddits...")
+    for sr_name in REDDIT_SUBREDDITS_INTL:
+        try:
+            sr = reddit.subreddit(sr_name)
+            for sub in sr.search("Qobuz", sort="new", time_filter="month", limit=15):
+                process_submission(sub)
+            for comment in sr.comments(limit=50):
+                process_comment(comment, sr_name)
+        except Exception as e:
+            print(f"  Intl subreddit r/{sr_name} error: {e}")
+
     print(f"  Reddit: {len(posts)} new items found")
     return posts
 
 
 # ─── News (Google News RSS) ───────────────────────────────────────────────────
 
+def _parse_rss_items(root):
+    """Extract items from RSS 2.0 <channel><item> or Atom <feed><entry> format."""
+    # RSS 2.0
+    channel = root.find("channel")
+    if channel is not None:
+        return channel.findall("item"), "rss"
+    # Atom
+    ns = {"atom": "http://www.w3.org/2005/Atom"}
+    entries = root.findall("atom:entry", ns)
+    if entries:
+        return entries, "atom"
+    # Try Atom without namespace
+    entries = root.findall("entry")
+    if entries:
+        return entries, "atom-bare"
+    return [], "unknown"
+
+
+def _extract_item_fields(item, fmt: str) -> tuple[str, str, str, str, str]:
+    """Extract (title, link, pub_date, description, source_name) from an RSS/Atom item."""
+    if fmt == "rss":
+        title = (item.findtext("title") or "").strip()
+        link = (item.findtext("link") or "").strip()
+        pub_date = (item.findtext("pubDate") or "").strip()
+        description = (item.findtext("description") or "").strip()
+        source_elem = item.find("source")
+        source_name = source_elem.text if source_elem is not None else ""
+        return title, link, pub_date, description, source_name
+    else:
+        # Atom format
+        ns = {"atom": "http://www.w3.org/2005/Atom"}
+        title = (item.findtext("atom:title", namespaces=ns) or item.findtext("title") or "").strip()
+        link_elem = item.find("atom:link", ns) or item.find("link")
+        link = (link_elem.get("href", "") if link_elem is not None else "").strip()
+        pub_date = (item.findtext("atom:updated", namespaces=ns) or item.findtext("updated") or
+                    item.findtext("atom:published", namespaces=ns) or item.findtext("published") or "").strip()
+        description = (item.findtext("atom:summary", namespaces=ns) or item.findtext("summary") or "").strip()
+        return title, link, pub_date, description, ""
+
+
 def collect_news(existing_ids: set) -> list[dict]:
-    """Collect news articles via Google News RSS search."""
+    """Collect news articles via Google News RSS search + direct RSS feeds."""
+    from email.utils import parsedate_to_datetime as _parse_rfc_date
+
     now = datetime.now(timezone.utc).isoformat()
     posts = []
     seen_this_run = set()
 
     print("Collecting news articles...")
 
-    for query in NEWS_QUERIES:
-        encoded = urllib.parse.quote(query)
-        url = f"https://news.google.com/rss/search?q={encoded}&hl=en-US&gl=US&ceid=US:en"
-
+    def _process_gnews_url(query: str, url: str):
+        """Fetch and parse a Google News RSS URL."""
         xml_content = fetch_url(url)
         if not xml_content:
-            continue
-
+            return
         try:
             root = ET.fromstring(xml_content)
         except ET.ParseError as e:
-            print(f"  XML parse error: {e}")
-            continue
-
-        channel = root.find("channel")
-        if channel is None:
-            continue
-
-        for item in channel.findall("item"):
-            title = (item.findtext("title") or "").strip()
-            link = (item.findtext("link") or "").strip()
-            pub_date = (item.findtext("pubDate") or "").strip()
-            description = (item.findtext("description") or "").strip()
-            source_elem = item.find("source")
-            source_name = source_elem.text if source_elem is not None else "Unknown"
-
-            full_text = title + " " + description
-
-            # Must mention Qobuz
-            if "qobuz" not in full_text.lower():
+            print(f"  XML parse error for '{query}': {e}")
+            return
+        items, fmt = _parse_rss_items(root)
+        for item in items:
+            title, link, pub_date, description, source_name = _extract_item_fields(item, fmt)
+            if not link:
                 continue
-
-            # Make stable ID from URL
-            pid = make_id("news", hashlib.md5(link.encode()).hexdigest()[:12])
-            if pid in existing_ids or pid in seen_this_run:
-                continue
-            seen_this_run.add(pid)
-
-            # Parse date
-            try:
-                from email.utils import parsedate_to_datetime
-                dt = parsedate_to_datetime(pub_date)
-                date_iso = dt.isoformat()
-            except Exception:
-                date_iso = now
-
-            news_narratives = tag_narratives(full_text)
-            post = {
-                "id": pid,
-                "source": "news",
-                "type": "article",
-                "platform_from": detect_platform_from(full_text),
-                "narratives": news_narratives,
-                "direction": detect_direction(full_text, news_narratives),
-                "url": link,
-                "title": title[:300],
-                "text": description[:600],
-                "author": source_name,
-                "author_age_days": None,
-                "author_karma": None,
-                "subreddit": None,
-                "date": date_iso,
-                "score": 0,
-                "num_comments": 0,
-                "discovered": now,
-                "bot_score": 0.0,
-                "bot_signals": [],
-            }
-            posts.append(post)
-
-    # ── Direct RSS feeds from music industry trades ──
-    from email.utils import parsedate_to_datetime as _parse_rfc_date
-    for feed_name, feed_url in DIRECT_RSS_FEEDS:
-        print(f"  RSS: {feed_name}")
-        xml_content = fetch_url(feed_url)
-        if not xml_content:
-            continue
-        try:
-            root = ET.fromstring(xml_content)
-        except ET.ParseError:
-            continue
-        channel = root.find("channel")
-        if channel is None:
-            continue
-        for item in channel.findall("item"):
-            title = (item.findtext("title") or "").strip()
-            link = (item.findtext("link") or "").strip()
-            pub_date = (item.findtext("pubDate") or "").strip()
-            description = (item.findtext("description") or "").strip()
             full_text = title + " " + description
             if "qobuz" not in full_text.lower():
                 continue
@@ -515,14 +580,80 @@ def collect_news(existing_ids: set) -> list[dict]:
                 date_iso = dt.isoformat()
             except Exception:
                 date_iso = now
-            rss_narratives = tag_narratives(full_text)
             post = {
                 "id": pid,
                 "source": "news",
                 "type": "article",
-                "platform_from": detect_platform_from(full_text),
-                "narratives": rss_narratives,
-                "direction": detect_direction(full_text, rss_narratives),
+                "platform_from": "generic",
+                "narratives": [],
+                "direction": "neutral",
+                "url": link,
+                "title": title[:300],
+                "text": description[:600],
+                "author": source_name or "Unknown",
+                "author_age_days": None,
+                "author_karma": None,
+                "subreddit": None,
+                "date": date_iso,
+                "score": 0,
+                "num_comments": 0,
+                "discovered": now,
+                "bot_score": 0.0,
+                "bot_signals": [],
+                "campaign_burst": False,
+                "language": "en",
+            }
+            _finalize_post(post)
+            posts.append(post)
+
+    # English Google News queries
+    for query in NEWS_QUERIES:
+        encoded = urllib.parse.quote(query)
+        url = f"https://news.google.com/rss/search?q={encoded}&hl=en-US&gl=US&ceid=US:en"
+        _process_gnews_url(query, url)
+
+    # International Google News queries
+    print("  International news queries...")
+    for query, lang, country in NEWS_QUERIES_INTL:
+        encoded = urllib.parse.quote(query)
+        url = f"https://news.google.com/rss/search?q={encoded}&hl={lang}&gl={country}&ceid={country}:{lang}"
+        _process_gnews_url(query, url)
+
+    # ── Direct RSS feeds (English + international) ──
+    all_rss_feeds = DIRECT_RSS_FEEDS + DIRECT_RSS_FEEDS_INTL
+    for feed_name, feed_url in all_rss_feeds:
+        print(f"  RSS: {feed_name}")
+        xml_content = fetch_url(feed_url)
+        if not xml_content:
+            continue
+        try:
+            root = ET.fromstring(xml_content)
+        except ET.ParseError:
+            continue
+        items, fmt = _parse_rss_items(root)
+        for item in items:
+            title, link, pub_date, description, _ = _extract_item_fields(item, fmt)
+            if not link:
+                continue
+            full_text = title + " " + description
+            if "qobuz" not in full_text.lower():
+                continue
+            pid = make_id("news", hashlib.md5(link.encode()).hexdigest()[:12])
+            if pid in existing_ids or pid in seen_this_run:
+                continue
+            seen_this_run.add(pid)
+            try:
+                dt = _parse_rfc_date(pub_date)
+                date_iso = dt.isoformat()
+            except Exception:
+                date_iso = now
+            post = {
+                "id": pid,
+                "source": "news",
+                "type": "article",
+                "platform_from": "generic",
+                "narratives": [],
+                "direction": "neutral",
                 "url": link,
                 "title": title[:300],
                 "text": description[:600],
@@ -537,7 +668,9 @@ def collect_news(existing_ids: set) -> list[dict]:
                 "bot_score": 0.0,
                 "bot_signals": [],
                 "campaign_burst": False,
+                "language": "en",
             }
+            _finalize_post(post)
             posts.append(post)
 
     print(f"  News: {len(posts)} new articles found")
@@ -599,14 +732,13 @@ def _process_reddit_public_post(p: dict, posts: list, seen: set,
     permalink = p.get("permalink", "")
     url = f"https://reddit.com{permalink}" if permalink else f"https://reddit.com/r/{p.get('subreddit', '')}"
 
-    narratives = tag_narratives(full_text)
     post = {
         "id": pid,
         "source": "reddit",
         "type": "post",
-        "platform_from": detect_platform_from(full_text),
-        "narratives": narratives,
-        "direction": detect_direction(full_text, narratives),
+        "platform_from": "generic",
+        "narratives": [],
+        "direction": "neutral",
         "url": url,
         "title": title[:300],
         "text": body[:600],
@@ -621,7 +753,9 @@ def _process_reddit_public_post(p: dict, posts: list, seen: set,
         "bot_score": 0.0,
         "bot_signals": [],
         "campaign_burst": False,
+        "language": "en",
     }
+    _finalize_post(post)
     posts.append(post)
 
 
@@ -667,7 +801,103 @@ def collect_reddit_public(existing_ids: set) -> list[dict]:
                 _process_reddit_public_post(child.get("data", {}), posts, seen, existing_ids, now)
         time.sleep(1.1)
 
+    # 3. International queries
+    print("  International queries (public API)...")
+    for query in REDDIT_QUERIES_INTL[:15]:  # limit to keep within rate limits
+        encoded = urllib.parse.quote(query)
+        url = f"{BASE}/search.json?q={encoded}&sort=new&t=month&limit=15&type=link"
+        data = fetch_reddit_json(url)
+        if data:
+            for child in data.get("data", {}).get("children", []):
+                _process_reddit_public_post(child.get("data", {}), posts, seen, existing_ids, now)
+        time.sleep(1.1)
+
+    # 4. International subreddits
+    print("  International subreddits (public API)...")
+    for sr_name in REDDIT_SUBREDDITS_INTL:
+        url = f"{BASE}/r/{sr_name}/search.json?q=qobuz&sort=new&t=month&limit=15&restrict_sr=1"
+        data = fetch_reddit_json(url)
+        if data:
+            for child in data.get("data", {}).get("children", []):
+                _process_reddit_public_post(child.get("data", {}), posts, seen, existing_ids, now)
+        time.sleep(1.1)
+
     print(f"  Reddit (public API): {len(posts)} new posts found")
+    return posts
+
+
+# ─── Hacker News (Algolia API — free, no auth) ──────────────────────────────
+
+def collect_hackernews(existing_ids: set) -> list[dict]:
+    """Collect Hacker News stories/comments mentioning Qobuz via Algolia API."""
+    now = datetime.now(timezone.utc).isoformat()
+    posts: list[dict] = []
+    seen_this_run: set[str] = set()
+
+    print("Collecting Hacker News...")
+
+    url = "https://hn.algolia.com/api/v1/search_by_date?query=qobuz&tags=(story,comment)&hitsPerPage=50"
+    raw = fetch_url(url)
+    if not raw:
+        print("  Hacker News: fetch failed")
+        return posts
+
+    try:
+        data = json.loads(raw)
+    except Exception:
+        print("  Hacker News: JSON parse error")
+        return posts
+
+    for hit in data.get("hits", []):
+        object_id = hit.get("objectID", "")
+        if not object_id:
+            continue
+
+        pid = make_id("hackernews", object_id)
+        if pid in existing_ids or pid in seen_this_run:
+            continue
+        seen_this_run.add(pid)
+
+        title = hit.get("title") or ""
+        text = hit.get("comment_text") or hit.get("story_text") or ""
+        # Strip HTML tags from HN comment text
+        text = re.sub(r"<[^>]+>", " ", text).strip()
+        text = re.sub(r"\s+", " ", text)
+
+        full_text = f"{title} {text}"
+        if "qobuz" not in full_text.lower():
+            continue
+
+        hn_url = hit.get("url") or f"https://news.ycombinator.com/item?id={object_id}"
+        date_str = hit.get("created_at") or now
+
+        post = {
+            "id": pid,
+            "source": "hackernews",
+            "type": "story" if hit.get("title") else "comment",
+            "platform_from": "generic",
+            "narratives": [],
+            "direction": "neutral",
+            "url": hn_url,
+            "title": (title or text[:120])[:300],
+            "text": text[:600],
+            "author": hit.get("author") or "unknown",
+            "author_age_days": None,
+            "author_karma": None,
+            "subreddit": None,
+            "date": date_str,
+            "score": hit.get("points") or 0,
+            "num_comments": hit.get("num_comments") or 0,
+            "discovered": now,
+            "bot_score": 0.0,
+            "bot_signals": [],
+            "campaign_burst": False,
+            "language": "en",
+        }
+        _finalize_post(post)
+        posts.append(post)
+
+    print(f"  Hacker News: {len(posts)} new items found")
     return posts
 
 
@@ -761,6 +991,7 @@ def build_metadata(all_posts: list[dict]) -> dict:
     by_month: dict[str, int] = {}
     by_direction: dict[str, int] = {"pro": 0, "critical": 0, "neutral": 0}
     by_direction_by_month: dict[str, dict[str, int]] = {}
+    by_language: dict[str, int] = {}
 
     week_ago = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
     posts_this_week = 0
@@ -783,6 +1014,9 @@ def build_metadata(all_posts: list[dict]) -> dict:
         if date_str and date_str >= week_ago:
             posts_this_week += 1
 
+        lang = p.get("language", "en")
+        by_language[lang] = by_language.get(lang, 0) + 1
+
         direction = p.get("direction", "neutral")
         by_direction[direction] = by_direction.get(direction, 0) + 1
         if date_str:
@@ -804,6 +1038,7 @@ def build_metadata(all_posts: list[dict]) -> dict:
         "by_month": dict(sorted(by_month.items(), reverse=True)),
         "by_direction": by_direction,
         "by_direction_by_month": dict(sorted(by_direction_by_month.items(), reverse=True)),
+        "by_language": dict(sorted(by_language.items(), key=lambda x: -x[1])),
         "detected_bursts": [],  # populated by detect_campaign_bursts()
     }
 
@@ -833,6 +1068,7 @@ def main():
         print("Reddit OAuth credentials not set — using public API fallback.")
         new_posts += collect_reddit_public(existing_ids)   # no-auth fallback
     new_posts += collect_news(existing_ids)
+    new_posts += collect_hackernews(existing_ids)
     new_posts += collect_twitter(existing_ids)
 
     print(f"\nNew posts collected: {len(new_posts)}")

@@ -1,5 +1,28 @@
 [
   {
+    "id": "news_a0f2bfd8f603",
+    "source": "news",
+    "type": "article",
+    "platform_from": "generic",
+    "narratives": [],
+    "direction": "neutral",
+    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPS2xlX0FiVUhjaWFUd2lnUThGV3BWU0duWWJNOFdxQUtITXVJazc5YzdZM2tqZnBBc05tcVhBWGJOT3p4M3BYQnR4ODFHOERRQXljNWU5cUEteHR0cVg2TEE2TVVRaGhUZE11MzB6YURXYkZKdFg1SWdVakJKNFo5Y0Ewb0RIUUV3STBhTHVKNzNvekJmdUxhc3kyN2hRQnZ3SXp3TmxENG12VmZVTWhiVVFB?oc=5",
+    "title": "Les pépites de l’équipe Vol.3 & 4 - Qobuz",
+    "text": "<a href=\"https://news.google.com/rss/articles/CBMisgFBVV95cUxPS2xlX0FiVUhjaWFUd2lnUThGV3BWU0duWWJNOFdxQUtITXVJazc5YzdZM2tqZnBBc05tcVhBWGJOT3p4M3BYQnR4ODFHOERRQXljNWU5cUEteHR0cVg2TEE2TVVRaGhUZE11MzB6YURXYkZKdFg1SWdVakJKNFo5Y0Ewb0RIUUV3STBhTHVKNzNvekJmdUxhc3kyN2hRQnZ3SXp3TmxENG12VmZVTWhiVVFB?oc=5\" target=\"_blank\">Les pépites de l’équipe Vol.3 & 4</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Qobuz</font>",
+    "author": "Qobuz",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2025-02-27T08:00:00+00:00",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-23T17:15:03.351234+00:00",
+    "bot_score": 0.0,
+    "bot_signals": [],
+    "campaign_burst": false,
+    "language": "unknown"
+  },
+  {
     "id": "news_f5f5166943ec",
     "source": "news",
     "type": "article",
@@ -44,6 +67,31 @@
     "bot_signals": []
   },
   {
+    "id": "news_3908eb4872c7",
+    "source": "news",
+    "type": "article",
+    "platform_from": "generic",
+    "narratives": [
+      "quality"
+    ],
+    "direction": "neutral",
+    "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQaVJFcEhaUllyb0JKamRZcUdXWDQ2TjlmcEhGVVQ5bnoxOE91b2Y2TFVIUE44bEhKd3F0TEU1ajdhWEhyRmpPZVBvYmZrOTdOSEVETDdYdE5IdU5LbUdlQy1PRm1FeGxqRXAybmVlYlJxX0ppYmJBeV9ZM1hvSFROdFk0YTJ1d2NWYU1TYVMzRU1iQXVic0JzdnBoeHpZNUg3dUh1SnlPakpCUQ?oc=5",
+    "title": "Qobuz Club: Deutschsprachiger Bereich im Forum für HiFi- und Musik-Fans startet - HIFI.DE",
+    "text": "<a href=\"https://news.google.com/rss/articles/CBMiqgFBVV95cUxQaVJFcEhaUllyb0JKamRZcUdXWDQ2TjlmcEhGVVQ5bnoxOE91b2Y2TFVIUE44bEhKd3F0TEU1ajdhWEhyRmpPZVBvYmZrOTdOSEVETDdYdE5IdU5LbUdlQy1PRm1FeGxqRXAybmVlYlJxX0ppYmJBeV9ZM1hvSFROdFk0YTJ1d2NWYU1TYVMzRU1iQXVic0JzdnBoeHpZNUg3dUh1SnlPakpCUQ?oc=5\" target=\"_blank\">Qobuz Club: Deutschsprachiger Bereich im Forum für HiFi- und Musik-Fans startet</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">HIFI.DE</font>",
+    "author": "HIFI.DE",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2025-02-13T08:00:00+00:00",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-23T17:15:03.351234+00:00",
+    "bot_score": 0.0,
+    "bot_signals": [],
+    "campaign_burst": false,
+    "language": "unknown"
+  },
+  {
     "id": "news_f56fa206ea99",
     "source": "news",
     "type": "article",
@@ -86,5 +134,30 @@
     "discovered": "2026-02-22T00:38:15.129626+00:00",
     "bot_score": 0.0,
     "bot_signals": []
+  },
+  {
+    "id": "news_94c13c7f4e97",
+    "source": "news",
+    "type": "article",
+    "platform_from": "generic",
+    "narratives": [
+      "quality"
+    ],
+    "direction": "neutral",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNLXVJc2txalVYdHB6WFprMGdtaTNrdWlTT19OX2tEbTh0bndyT2d2WW9aQzlOdUhwTkdGOXZicHFTMVkyZW4yd2Y0YXpXaUhGNkZYeW5VTjVsQWlYWGliZTBDRDNyVWlLN19DZl9VallHSTlVaWdRSEE4LVd6UHZoMkZEZUVLanV0bkE4cTNVcXVvNmI1ZmpsTF9JVERUVnlDeGJUVjZIZmNfdVJ1SkdfVXZyVk9vZw?oc=5",
+    "title": "Musikstreaming in Hi-Res-Qualität: So könnt ihr Qobuz 2 Monate kostenlos testen - Netzwelt",
+    "text": "<a href=\"https://news.google.com/rss/articles/CBMitgFBVV95cUxNLXVJc2txalVYdHB6WFprMGdtaTNrdWlTT19OX2tEbTh0bndyT2d2WW9aQzlOdUhwTkdGOXZicHFTMVkyZW4yd2Y0YXpXaUhGNkZYeW5VTjVsQWlYWGliZTBDRDNyVWlLN19DZl9VallHSTlVaWdRSEE4LVd6UHZoMkZEZUVLanV0bkE4cTNVcXVvNmI1ZmpsTF9JVERUVnlDeGJUVjZIZmNfdVJ1SkdfVXZyVk9vZw?oc=5\" target=\"_blank\">Musikstreaming in Hi-Res-Qualität: So könnt ihr Qobuz 2 Monate kostenlos testen</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Netzwelt</font>",
+    "author": "Netzwelt",
+    "author_age_days": null,
+    "author_karma": null,
+    "subreddit": null,
+    "date": "2025-02-05T08:00:00+00:00",
+    "score": 0,
+    "num_comments": 0,
+    "discovered": "2026-02-23T17:15:03.351234+00:00",
+    "bot_score": 0.0,
+    "bot_signals": [],
+    "campaign_burst": false,
+    "language": "unknown"
   }
 ]
