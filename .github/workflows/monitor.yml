@@ -43,6 +43,7 @@ jobs:
           node-version: '20'
 
       - name: Encrypt with StaticCrypt
+        if: ${{ secrets.SITE_PASSWORD != '' }}
         run: |
           npx staticrypt@3 index_plain.html \
             --password "${{ secrets.SITE_PASSWORD }}" \
